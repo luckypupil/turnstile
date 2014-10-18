@@ -44,21 +44,21 @@ class User(db.Model):
 
 
 class Company(db.Model):
-	__tablename__ = 'companies'
-	id = db.Column(db.Integer, primary_key=True)
-	name = db.Column(db.String(64), nullable=False)
+    __tablename__ = 'companies'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), nullable=False)
 	#categories = db.Column(ManytoMany!)
 	#todo: add contact info
-	segment = db.Column(db.Integer, db.ForeignKey('segments.id'))
-	stores = db.relationships('Store', lazy='dynamic')
-	users = db.relationships('User', lazy='dynamic')
-	skus = db.relationships('User', lazy='dynamic')
+    segment = db.Column(db.Integer, db.ForeignKey('segments.id'))
+    stores = db.relationship('Store', lazy='dynamic')
+    users = db.relationship('User', lazy='dynamic')
+    skus = db.relationship('User', lazy='dynamic')
 	#amazon_credentials =  db.relationships()
 
-	def get_admins(self):
-		pass
+    def get_admins(self):
+	    pass
 
-	def __repr__(self):
+    def __repr__(self):
         return self.name
 
 
@@ -70,7 +70,7 @@ class Store(db.Model):
     street = db.Column(db.Text())
     city = db.Column(db.String(32))
     state = db.Column(db.String(2))
-    zip = db.Column(db.Integer(5))
+    zip = db.Column(db.Integer)
     #geo
     warehouse = db.Column(db.Boolean, default=False)
     skus = db.relationship('SKU', lazy='dynamic')
@@ -81,10 +81,10 @@ class Store(db.Model):
         return str(self.store_num)
 
     def get_sales(self):
-    	pass
+        pass
 
     def get_sss(self):
-    	pass
+        pass
 
 
 # class Store_Distribution(db.Model):
