@@ -1,0 +1,53 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Turnstile{% endblock %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/styles.css') }}">
+<link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='img/box.ico') }}">
+{% endblock %}
+
+{% block navbar %}
+<div class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Turnstile</a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="{{ url_for('main.dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('main.sku_list') }}">SKU List</a></li>
+                <li><a href="{{ url_for('main.sku_store') }}">Stores</a></li>
+                <li><a href="{{ url_for('main.dispo_list') }}">Dispositions</a></li>
+                <li><a href="#">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="page-header">{% block pagelabel %}{% endblock %}</div>
+    {% block page_content %}
+    {% endblock %}
+</div>
+<div class="navbar navbar-default navbar-fixed-bottom navbar-left" role="navigation">
+    <div class="container-fluid footer">
+    	<p> <span class="glyphicon glyphicon-copyright-mark"></span> 2014 Turnstile. All Rights reserved.</p>
+    </div>
+</div>
+{% endblock %}
+{% block footer %}
+
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+{% endblock %}
