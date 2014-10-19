@@ -73,7 +73,6 @@ class Store(db.Model):
     zip = db.Column(db.Integer)
     #geo
     warehouse = db.Column(db.Boolean, default=False)
-    skus = db.relationship('SKU', lazy='dynamic')
     #ship_leads = db.relationships('')
     #managers = db.relationships('')
 
@@ -120,8 +119,10 @@ class SKU(db.Model):
 
 	# def OPGM$/unit ()
 	# def CPGM$/unit ()
-	# def OPGM% ()
-	# def CPGM% ()
+    
+    def get_gm(self,price):
+	    return ((price - self.unit_cost)/self.unit_cost)
+
 	# def Velocity
 	# def getCurrentUnits (from store distribution)
 	# def getUnitsOrdered (from orders)
