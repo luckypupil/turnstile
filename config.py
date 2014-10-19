@@ -4,6 +4,15 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY')
+    DEV_DATA = {
+        'categories': ["Men's Shoes","Coats","Women's Pants","Accessories", "Cell Phones"],
+        'companies': ["Macy's","Ross","Saks 5th Avenue","Best Buy"],
+        'segments': ["Department","Hardgoods","Discount","Dollar","Electronics","Home Improvement","Apparel","Jewelry","Other"],
+        'user_roles': ["Category Manager", "Exec", "Store Lead","Store Manager"], 
+    }
+
+
+
     pass
 
 
@@ -13,7 +22,7 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'dbs/dev.sqlite')
   
-  
+
 class TestingConfig(Config):
     TESTING = True
     SECRET_KEY = 'secret'

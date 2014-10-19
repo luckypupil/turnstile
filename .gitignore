@@ -2,3 +2,4 @@ turnstileenv/
 dbs/
 app/__pycache__/
 app/main/__pycache__/
+__pycache__/
