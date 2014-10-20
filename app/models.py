@@ -16,6 +16,7 @@ class Segment(db.Model):
     __tablename__ = 'segments'
     id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.String(32), unique=True)
+    
 
     def __init__(self,type):
         self.type = type
@@ -33,6 +34,7 @@ class User(db.Model):
     password = db.Column(db.String(64))#todo: add password hash#
     company = db.Column(db.Integer, db.ForeignKey('companies.id'))
     role = db.Column(db.Integer, db.ForeignKey('user_roles.id'))
+    phone = db.Column(db.String(10))
     #category_permissions = db.Column(Manyto Many!)
     #category_admin = #
     list_admin = db.Column(db.Boolean, default=False)
@@ -48,12 +50,15 @@ class Company(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), nullable=False)
 	#categories = db.Column(ManytoMany!)
-	#todo: add contact info
     segment = db.Column(db.Integer, db.ForeignKey('segments.id'))
     stores = db.relationship('Store', lazy='dynamic')
     users = db.relationship('User', lazy='dynamic')
     skus = db.relationship('User', lazy='dynamic')
-	#amazon_credentials =  db.relationships()
+    street = db.Column(db.Text())
+    city = db.Column(db.String(32))
+    state = db.Column(db.String(2))
+    zip = db.Column(db.Integer)
+    #amazon_credentials =  db.relationships()
 
     def get_admins(self):
 	    pass
@@ -71,6 +76,9 @@ class Store(db.Model):
     city = db.Column(db.String(32))
     state = db.Column(db.String(2))
     zip = db.Column(db.Integer)
+    #todo: update coords to postgis
+    lat = db.Column(db.Float(6))
+    lng = db.Column(db.Float(6))
     #geo
     warehouse = db.Column(db.Boolean, default=False)
     #ship_leads = db.relationships('')
@@ -105,10 +113,9 @@ class SKU(db.Model):
     product_name = db.Column(db.String(64), nullable=False)
     brand = db.Column(db.String(64))
     category = db.Column(db.Integer, db.ForeignKey('categories.id'))
-    op = db.Column(db.Float, nullable=False)
-    cp = db.Column(db.Float, nullable=False)
-    op = db.Column(db.Float)
-    #Order(backref)
+    org_price = db.Column(db.Float, nullable=False)
+    current_price = db.Column(db.Float, nullable=False)
+    opt_price= db.Column(db.Float)
     release = db.Column(db.Date)
     phase_out = db.Column(db.Date)
     unit_cost = db.Column(db.Float)

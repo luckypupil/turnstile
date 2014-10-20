@@ -1,21 +1,21 @@
 #!/usr/bin/env python
 import os
 from flask.ext.script import Manager
+from flask.ext.migrate import Migrate, MigrateCommand
+from pprint import pprint
 
 
-from app import create_app
+from app import create_app, db, models
+app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 
-
-#app = create_app(os.getenv('FLASK_CONFIG') or 'default')
-
-manager = Manager(create_app)
+migrate = Migrate(app, db)
+manager = Manager(app)
 
 @manager.shell
 def make_shell_context():
-    app = create_app()
-    from app import db, models
-    return dict(app=app, db=db, models=models)
+    return dict(app=app, db=db, models=models, pp=pprint)
 
+manager.add_command('db', MigrateCommand)
 
 
 if __name__ == '__main__':

@@ -1,5 +1,7 @@
-from flask import render_template
+from flask import render_template, request
 from . import main
+from ..models import SKU
+from app import db
 
 @main.route('/')
 def dashboard():
@@ -7,7 +9,8 @@ def dashboard():
 
 @main.route('/list')
 def sku_list():
-	return render_template("main/sku_list.html",message='hello world!')
+	skus = SKU.query.all()
+	return render_template("main/sku_list.html",skus=skus)
 
 @main.route('/stores')
 def sku_store():
