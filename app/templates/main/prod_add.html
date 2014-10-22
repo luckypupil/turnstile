@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block pagelabel %}Add SKU{% endblock %}
+{% block page_content %}
+	{% for message in get_flashed_messages() %}
+		{{ message }}
+	{% endfor %}
+	<form role="form" method="POST" name="product_add" action="{{ url_for('.add_prod') }}">
+	    {{ form.csrf_token }}
+		<div class="form-group">
+    	{{ form.sku_num(class="form-control",placeholder="sku") }}
+    	</div>
+    	<div class="form-group">
+    	{{ form.product_name(class="form-control",placeholder="product") }}
+    	</div>
+    	<div class="form-group">
+    	{{ form.brand(class="form-control",placeholder="brand") }}
+    	</div>
+    	<div class="form-group">
+    	{{ form.category(class="form-control",placeholder="category") }}
+    	</div>
+    	<div class="form-group">
+    	{{ form.org_price(class="form-control",placeholder="MSRP") }}
+    	</div>
+    	<div class="form-group">
+    	{{ form.current_price(class="form-control",placeholder="Current Price") }}
+    	</div>
+    	<div class="form-group">
+    	{{ form.opt_price(class="form-control",placeholder="Optimal Price") }}
+    	</div>
+    	<div class="form-group">
+    	{{ form.unit_cost(class="form-control",placeholder="Unit Cost") }}
+    	</div>
+    	<div class="form-group">
+    	{{ form.release(class="form-control",placeholder="Release Date") }}
+    	</div>
+    	<div class="form-group">
+    	{{ form.phase_out(class="form-control",placeholder="Phase Out") }}
+    	</div>
+    	<button type="submit" class="btn btn-default">Submit</button>
+  	</form>
+{% endblock %}
+
+
+<!-- 
+    sku_num = StringField('SKU',validators= [Required(),Length(32)])
+    product_name = StringField('Product',validators= [Required(),Length(64)])
+    brand = StringField('Brand',validators= [Length(64)])
+    category = SelectField('Category', choices=[(6,"Men's Shoes"),(7,"Coats"),(8,"Women's Coats"),(9,"Accessories"),(10,"Cell Phones")])
+    org_price = IntegerField('MSRP')
+    current_price = IntegerField('Current Price')
+    opt_price = IntegerField('Optimal Price')
+    unit_cost = IntegerField('Unit Cost')
+    release = DateField('Release Date')
+    phase_out = DateField('Phase Out') -->

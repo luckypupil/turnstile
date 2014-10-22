@@ -6,7 +6,7 @@
 		<div class="col-md-3">Choose Category</div>
 		<div class="col-md-3">SKU Search</div>
 	</div>
-	<div class="row top-buffer">
+	<div class="row top-buffer table-responsive">
 		<table class="table table-striped">
 			<th>
 				
@@ -15,10 +15,10 @@
 				<td>Brand</td>
 				<td>Opt Price</td>
 				<td>Crnt Price</td>
-				<td>Diff</td>
+				<td>Dffrnc($)</td>
 				<td>Opt GM</td>
 				<td>Crnnt GM</td>
-				<td>Impact($)</td>
+				<td>Impact($K)</td>
 				<td>Units</td>
 				<td>Phase Out</td>
 				<td>Days Past</td>
@@ -31,13 +31,13 @@
 				<td>{{ sku.brand }}</td>
 				<td>{{ sku.opt_price }}</td>
 				<td>{{ sku.current_price }}</td>
-				<td>{{ 'sku.diff()' }}</td>
-				<td>{{ 'sku.get_gm(sku.opt_price)' }}</td>
-				<td>{{ 'sku.get_gm(sku.current_price)' }}</td>
-				<td>{{ 'sku.impact($)' }}</td>
+				<td>{{ '$%d' | format(sku.price_diff()) }}</td>
+				<td>{{ '{0:0.1f}%'.format(sku.gm(sku.opt_price)*100) }}</td>
+				<td>{{ '{0:0.1f}%'.format(sku.gm(sku.current_price)*100) }}</td>
+				<td>{{ sku.get_gm_impact() }}</td>
 				<td> {{ 500 }}</td>
 				<td>{{ sku.phase_out }}</td>
-				<td>{{ 'sku.days_past()' }}</td>
+				<td>{{ sku.get_days_past() }}</td>
 			</tr>
 			{% endfor %}
 		</table>

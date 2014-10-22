@@ -109,7 +109,7 @@ class Store(db.Model):
 class SKU(db.Model):
     __tablename__ = 'skus'
     id = db.Column(db.Integer, primary_key=True)
-    sku_num = db.Column(db.String(32), nullable=False)
+    sku_num = db.Column(db.String(32), nullable=False, unique=True)
     product_name = db.Column(db.String(64), nullable=False)
     brand = db.Column(db.String(64))
     category = db.Column(db.Integer, db.ForeignKey('categories.id'))
@@ -127,10 +127,20 @@ class SKU(db.Model):
 	# def OPGM$/unit ()
 	# def CPGM$/unit ()
     
-    def get_gm(self,price):
-	    return ((price - self.unit_cost)/self.unit_cost)
+    def gm(self,price):
+        return ((price - self.unit_cost)/self.unit_cost)
 
-	# def Velocity
+    def price_diff(self):
+        """Difference($) between current price and optimal price"""
+        return (self.opt_price-self.current_price)
+	
+    def get_gm_impact(self):
+        return (25)
+
+    def get_days_past(self):
+        return 12
+
+    # def Velocity
 	# def getCurrentUnits (from store distribution)
 	# def getUnitsOrdered (from orders)
 	# def getShippingCost(Dest)
