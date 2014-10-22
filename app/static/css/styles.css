@@ -1,8 +1,11 @@
 .footer {
-	padding-top: 15px;
 }
+.block-container {
+	margin-bottom: 75px;
+}
+
 .page-header {
-	margin-top: 20px;
+	margin-top: 5px;
 }
 .top-buffer {
 	margin-top: 20px;

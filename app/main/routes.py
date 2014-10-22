@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, flash, url_for
 from . import main
 from ..models import SKU
 from app import db
-from .forms import prod_entry
+from .forms import prod_entry, sku_list_search
 from pprint import pprint as pp
 
 @main.route('/')
@@ -12,7 +12,8 @@ def dashboard():
 @main.route('/list')
 def sku_list():
 	skus = SKU.query.all()
-	return render_template("main/sku_list.html",skus=skus)
+	form = sku_list_search()
+	return render_template("main/sku_list.html",skus=skus, form=form)
 
 @main.route('/add', methods=['GET','POST'])
 def add_prod():

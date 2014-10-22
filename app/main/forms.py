@@ -3,6 +3,7 @@ from wtforms import TextField, BooleanField, FileField, StringField, IntegerFiel
 from wtforms.fields.html5 import DateField
 from wtforms.validators import Required, InputRequired, Length, Email
 
+
 class prod_entry(Form):
     sku_num = StringField('SKU',validators= [Required(),Length(max=32)])
     product_name = StringField('Product',validators= [Required(),Length(max=64)])
@@ -15,4 +16,6 @@ class prod_entry(Form):
     release = DateField('Release Date')
     phase_out = DateField('Phase Out')
 
-    # #product_name = StringField()
+class sku_list_search(Form):
+    category = SelectField('Category', choices=[(6,"Men's Shoes"),(7,"Coats"),(8,"Women's Coats"),(9,"Accessories"),(10,"Cell Phones")],coerce=int)
+    sku_search = StringField('Search')
