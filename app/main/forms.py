@@ -18,4 +18,4 @@ class prod_entry(Form):
 
 class sku_list_search(Form):
     category = SelectField('Category', choices=get_categories(),coerce=int)
-    sku_search = StringField('Search')
+    sku = StringField('Search')
