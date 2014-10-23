@@ -1,6 +1,7 @@
 {% extends "base.html" %}
-{% block pagelabel %}My Dashboard{% endblock %}
+{% block pagelabel %}Sku List{% endblock %}
 {% block page_content %}
+	{% block searchfield %}
 	<div class="row">
 		<div class="col-md-6"></div>
 		<form role="form" method="POST" name="sku_list" action="{{ url_for('.sku_list') }}">
@@ -22,7 +23,9 @@
 	    	</div>
           </form>
 	</div>
-	<div class="row top-buffer table-responsive">
+	{% endblock %}
+	{% block table %}
+	<div class="row table-responsive">
 		<table class="table table-striped">
 			<th>
 				
@@ -45,12 +48,12 @@
 				<td>{{ sku.sku_num }}</td>
 				<td>{{ sku.product_name }}</td>
 				<td>{{ sku.brand }}</td>
-				<td>{{ sku.get_opt_price() }}</td>
-				<td>{{ sku.current_price }}</td>
-				<td>{{ '$%d' | format(sku.price_diff()) }}</td>
+				<td>{{ '$%d' | format(sku.opt_price/100) }}</td>
+				<td>{{ '$%d' | format(sku.current_price/100) }}</td>
+				<td>{{ '$%d' | format(sku.price_diff()/100) }}</td>
 				<td>{{ '{0:0.1f}%'.format(sku.gm(sku.opt_price)*100) }}</td>
 				<td>{{ '{0:0.1f}%'.format(sku.gm(sku.current_price)*100) }}</td>
-				<td>{{ sku.gm_impact() }}</td>
+				<td>{{ '$%d' | format(sku.gm_impact()/100) }}</td>
 				<td> {{ 500 }}</td>
 				<td>{{ sku.phase_out }}</td>
 				<td>{{ sku.days_past() }}</td>
@@ -58,4 +61,5 @@
 			{% endfor %}
 		</table>
 	</div>
+	{% endblock %}
 {% endblock %}

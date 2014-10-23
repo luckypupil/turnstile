@@ -1,8 +1,8 @@
 from flask import render_template, request, redirect, flash, url_for
 from . import main
-from ..models import SKU, Category
+from ..models import SKU, Category, Store
 from app import db
-from .forms import prod_entry, sku_list_search
+from .forms import sku_list_search, sku_store_search
 from pprint import pprint as pp
 
 @main.route('/')
@@ -22,9 +22,19 @@ def sku_list():
 
     return render_template("main/sku_list.html",skus=skus, form=form)
 
-@main.route('/stores')
+@main.route('/stores',methods=["POST","GET"])
 def sku_store():
-	return render_template("main/sku_store.html",message='hello world!')
+    stores = db.session.query(Store).all()
+    form = sku_store_search()
+    if form.validate_on_submit():
+        print('validated')
+        state, store_num = form.state.data, form.store_num.data
+        if store_num:
+           stores = db.session.query(SKU).filter(Store.store_num == store_num).all()
+        else:
+           stores = (stores if not state else db.session.query(Store).filter(Store.state == state).all())
+    else: print(form.errors)
+    return render_template("main/sku_store.html",stores=stores, form=form)
 
 @main.route('/disposition')
 def dispo_list():

@@ -116,14 +116,14 @@ class SKU(db.Model):
     product_name = db.Column(db.String(64), nullable=False)
     brand = db.Column(db.String(64))
     category = db.Column(db.Integer, db.ForeignKey('categories.id'))
-    org_price = db.Column(db.Float, nullable=False)
-    current_price = db.Column(db.Float, nullable=False)
-    opt_price= db.Column(db.Float)
+    org_price = db.Column(db.Integer, nullable=False)
+    current_price = db.Column(db.Integer, nullable=False)
+    opt_price= db.Column(db.Integer)
     release = db.Column(db.Date)
     phase_out = db.Column(db.Date)
-    unit_cost = db.Column(db.Float)
-    crrnt_gm_forecast = db.Column(db.Float)
-    optml_gm_forecast = db.Column(db.Float)
+    unit_cost = db.Column(db.Integer)
+    crrnt_gm_forecast = db.Column(db.Integer)
+    optml_gm_forecast = db.Column(db.Integer)
 
     #shipping dimensions
     #promotions
@@ -162,15 +162,6 @@ class SKU(db.Model):
     def get_lqdt_score(self):
         return (random.randint(0,10))
 
-
-    # def Velocity
-	# def getCurrentUnits (from store distribution)
-	# def getUnitsOrdered (from orders)
-	# def getShippingCost(Dest)
-	# defgetChannelPrice()
-	# def $offOP ()
-	# def getDaysPast (sellthroughdate)
-	# def liquitidyScore()
 
 class Category(db.Model):
     __tablename__ = 'categories'
