@@ -20,7 +20,7 @@ def sku_list():
         else:
            skus = (skus if not cat_id else db.session.query(SKU).filter(SKU.category == cat_id).all())
 
-    return render_template("main/sku_list.html",skus=skus, form=form)
+    return render_template("main/sku_list.html",skus=skus, form=form,results=len(skus))
 
 @main.route('/stores',methods=["POST","GET"])
 def sku_store():
@@ -34,7 +34,7 @@ def sku_store():
         else:
            stores = (stores if not state else db.session.query(Store).filter(Store.state == state).all())
     else: print(form.errors)
-    return render_template("main/sku_store.html",stores=stores, form=form)
+    return render_template("main/sku_store.html",stores=stores, form=form,results=len(stores))
 
 @main.route('/disposition')
 def dispo_list():

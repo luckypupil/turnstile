@@ -71,7 +71,7 @@ states = {
 }
 
 def get_states():
-    state_list = [('A','All')]
+    state_list = [('','All')]
     for state in states:
 	    state_list.append((state,state))
 

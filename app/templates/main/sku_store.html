@@ -3,7 +3,7 @@
 {% block page_content %}
 	{% block searchfield %}
 	<div class="row">
-		<div class="col-md-6"></div>
+		<div class="col-md-6"><small>{{ 'Results: {}'.format(results) }}</small></div>
 		<form role="form" method="POST" name="sku_list" action="{{ url_for('.sku_store') }}">
             	{{ form.csrf_token }}
 			<div class="col-md-2">
