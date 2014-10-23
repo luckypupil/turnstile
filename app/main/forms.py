@@ -2,7 +2,7 @@ from flask.ext.wtf import Form
 from wtforms import TextField, BooleanField, FileField, StringField, IntegerField, validators, SelectField, FloatField
 from wtforms.fields.html5 import DateField
 from wtforms.validators import Required, InputRequired, Length, Email
-
+# from .helper import get_categories
 
 class prod_entry(Form):
     sku_num = StringField('SKU',validators= [Required(),Length(max=32)])

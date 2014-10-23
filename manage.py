@@ -5,7 +5,8 @@ from flask.ext.migrate import Migrate, MigrateCommand
 from pprint import pprint
 
 
-from app import create_app, db, models
+from app import create_app, models
+from app.shared import db
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 
 migrate = Migrate(app, db)
