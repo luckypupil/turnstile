@@ -45,15 +45,15 @@
 				<td>{{ sku.sku_num }}</td>
 				<td>{{ sku.product_name }}</td>
 				<td>{{ sku.brand }}</td>
-				<td>{{ sku.opt_price }}</td>
+				<td>{{ sku.get_opt_price() }}</td>
 				<td>{{ sku.current_price }}</td>
 				<td>{{ '$%d' | format(sku.price_diff()) }}</td>
 				<td>{{ '{0:0.1f}%'.format(sku.gm(sku.opt_price)*100) }}</td>
 				<td>{{ '{0:0.1f}%'.format(sku.gm(sku.current_price)*100) }}</td>
-				<td>{{ sku.get_gm_impact() }}</td>
+				<td>{{ sku.gm_impact() }}</td>
 				<td> {{ 500 }}</td>
 				<td>{{ sku.phase_out }}</td>
-				<td>{{ sku.get_days_past() }}</td>
+				<td>{{ sku.days_past() }}</td>
 			</tr>
 			{% endfor %}
 		</table>

@@ -1,3 +1,6 @@
+import random
+#todo: Remove once opt model complete
+from datetime import date
 from app import db
 
 class User_Role(db.Model):
@@ -119,13 +122,13 @@ class SKU(db.Model):
     release = db.Column(db.Date)
     phase_out = db.Column(db.Date)
     unit_cost = db.Column(db.Float)
+    crrnt_gm_forecast = db.Column(db.Float)
+    optml_gm_forecast = db.Column(db.Float)
+
     #shipping dimensions
     #promotions
     #activechannels
     #features
-
-	# def OPGM$/unit ()
-	# def CPGM$/unit ()
     
     def gm(self,price):
         return ((price - self.unit_cost)/self.unit_cost)
@@ -134,11 +137,31 @@ class SKU(db.Model):
         """Difference($) between current price and optimal price"""
         return (self.opt_price-self.current_price)
 	
-    def get_gm_impact(self):
-        return (25)
+    def gm_impact(self):
+        return (self.optml_gm_forecast-self.crrnt_gm_forecast)
 
-    def get_days_past(self):
+    def days_past(self):
         return 12
+    
+    #Data Pulled from Optimization model#
+
+    def get_opt_price(self):
+        new_opt_price = self.current_price*.9
+        #todo: update from optmization model
+        self.opt_price = new_opt_price
+
+    def get_gm(self,which_price="optimal"):
+        if which_price == "optimal":
+            self.optml_gm_forecast = self.crrnt_gm_forecast*1.1
+        else:
+            self.optml_gm_forecast = self.crrnt_gm_forecast
+
+    def get_salethrough(self,which_price="optimal"):
+        return (date(2015,4,15) if "optimal" else date(2015,5,15))
+
+    def get_lqdt_score(self):
+        return (random.randint(0,10))
+
 
     # def Velocity
 	# def getCurrentUnits (from store distribution)
