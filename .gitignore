@@ -5,3 +5,4 @@ app/main/__pycache__/
 __pycache__/
 todos.txt
 *.ipynb
+*pyc
