@@ -9,8 +9,8 @@ from pprint import pprint as pp
 def dashboard():
 	return render_template("main/dashboard.html",message='hello world!')
 
-@main.route('/list', methods=["POST","GET"])
-def sku_list():
+@main.route('/analysis', methods=["POST","GET"])
+def analysis():
     skus = db.session.query(SKU).all()
     form = sku_list_search()
     if form.validate_on_submit():
@@ -20,10 +20,16 @@ def sku_list():
         else:
            skus = (skus if not cat_id else db.session.query(SKU).filter(SKU.category == cat_id).all())
 
-    return render_template("main/sku_list.html",skus=skus, form=form,results=len(skus))
+    return render_template("main/analysis.html",skus=skus, form=form,results=len(skus))
+
+
+@main.route('/analysis', methods=["POST", "GET"])
+def history():
+    return('hellow world!')
+
 
 @main.route('/stores',methods=["POST","GET"])
-def sku_store():
+def stores():
     stores = db.session.query(Store).all()
     form = sku_store_search()
     if form.validate_on_submit():
@@ -34,11 +40,11 @@ def sku_store():
         else:
            stores = (stores if not state else db.session.query(Store).filter(Store.state == state).all())
     else: print(form.errors)
-    return render_template("main/sku_store.html",stores=stores, form=form,results=len(stores))
+    return render_template("main/stores.html",stores=stores, form=form,results=len(stores))
 
 @main.route('/disposition')
-def dispo_list():
-	return render_template("main/dispo_list.html",message='hello world!')
+def dispositions():
+	return render_template("main/dispositions.html",message='hello world!')
 
 @main.route('/disposition/<product>')
 def dispo_profile(product):

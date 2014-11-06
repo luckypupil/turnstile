@@ -1,10 +1,10 @@
-{% extends "main/sku_list.html" %}
+{% extends "main/analysis.html" %}
 {% block pagelabel %}SKU by Store{% endblock %}
 {% block page_content %}
 	{% block searchfield %}
 	<div class="row">
 		<div class="col-md-6"><small>{{ 'Results: {}'.format(results) }}</small></div>
-		<form role="form" method="POST" name="sku_list" action="{{ url_for('.sku_store') }}">
+		<form role="form" method="POST" name="stores" action="{{ url_for('.stores') }}">
             	{{ form.csrf_token }}
 			<div class="col-md-2">
 	            <div class="form-group">
