@@ -1,13 +1,23 @@
-from flask import render_template, request, redirect, flash, url_for
+from flask import render_template, request, redirect, flash, url_for, make_response
 from . import main
 from ..models import SKU, Category, Store
 from app import db
 from .forms import sku_list_search, sku_store_search
 from pprint import pprint as pp
+from .helper import make_stackedbar, make_wklybar
+from . import _skus, _stores, _sku_clusters, _store_distro, _categories
 
 @main.route('/')
 def dashboard():
-	return render_template("main/dashboard.html",message='hello world!')
+    # Cat Info
+    graphs = {}
+    graphs['sales'] = make_stackedbar("Sales($M)",30,28,5)
+    graphs['gm'] = make_stackedbar('GM($M)',13,12,2.5)
+    graphs['saleswk'] = make_wklybar("Sales($M)",30,28,5)
+    graphs['gmwk'] = make_wklybar('GM($M)',13,12,2.5)
+    
+    #test = mysku.get_metric('gm','crrnt')
+    return render_template("main/dashboard.html",message='hello world!', graphs=graphs)
 
 @main.route('/analysis', methods=["POST","GET"])
 def analysis():
@@ -49,5 +59,8 @@ def dispositions():
 @main.route('/disposition/<product>')
 def dispo_profile(product):
 	return render_template("main/dispo_profile.html",message='hello world!')
+
+
+
 
 

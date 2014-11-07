@@ -1,7 +1,10 @@
 import random
+from flask import url_for
 #todo: Remove once opt model complete
 from datetime import date
 from app import db
+from .main import _skus, _stores, _sku_clusters, _store_distro, _categories
+import requests
 
 class User_Role(db.Model):
     __tablename__ = 'user_roles'
@@ -33,16 +36,18 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(32))
     last_name = db.Column(db.String(32))
-    email = db.Column(db.String(64), unique=True, nullable=False)
+    email = db.Column(db.String(64), unique=True) #nullable
     password = db.Column(db.String(64))#todo: add password hash#
     company = db.Column(db.Integer, db.ForeignKey('companies.id'))
     role = db.Column(db.Integer, db.ForeignKey('user_roles.id'))
     phone = db.Column(db.String(10))
+    store = db.Column(db.Integer, db.ForeignKey('stores.id'))
+    #toAdds:
     #category_permissions = db.Column(Manyto Many!)
     #category_admin = #
-    list_admin = db.Column(db.Boolean, default=False)
-    is_admin = db.Column(db.Boolean, default=False)
-    store = db.Column(db.Integer, db.ForeignKey('stores.id'))
+    #list_admin = db.Column(db.Boolean, default=False)
+    #is_admin = db.Column(db.Boolean, default=False)
+    
 
     def __repr__(self):
         return self.email
@@ -51,7 +56,7 @@ class User(db.Model):
 class Company(db.Model):
     __tablename__ = 'companies'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64), nullable=False)
+    name = db.Column(db.String(64),) #nullable
 	#categories = db.Column(ManytoMany!)
     segment = db.Column(db.Integer, db.ForeignKey('segments.id'))
     stores = db.relationship('Store', lazy='dynamic')
@@ -61,6 +66,7 @@ class Company(db.Model):
     city = db.Column(db.String(32))
     state = db.Column(db.String(2))
     zip = db.Column(db.Integer)
+    #toadd:
     #amazon_credentials =  db.relationships()
 
     def get_admins(self):
@@ -73,63 +79,76 @@ class Company(db.Model):
 class Store(db.Model):
     __tablename__ = 'stores'
     id = db.Column(db.Integer, primary_key=True)
-    company = db.Column(db.Integer, db.ForeignKey('companies.id'), nullable=False)
-    store_num = db.Column(db.Integer, nullable=False)#May need to change to name
+    company = db.Column(db.Integer, db.ForeignKey('companies.id')) #nullable
+    store_num = db.Column(db.Integer)#nullable, May need to change to name
     street = db.Column(db.Text())
     city = db.Column(db.String(32))
     state = db.Column(db.String(2))
     zip = db.Column(db.Integer)
-    #todo: update coords to postgis
     lat = db.Column(db.Float(6))
     lng = db.Column(db.Float(6))
-    #geo
     warehouse = db.Column(db.Boolean, default=False)
+    crrnt_gm_forecast = db.Column(db.Integer)
+    optml_gm_forecast = db.Column(db.Integer)
+    crrnt_sales_forecast = db.Column(db.Integer)
+    optml_sales_forecast = db.Column(db.Integer)
+    crrnt_unitssold_forecast = db.Column(db.Integer)
+    optml_unitssold_forecast = db.Column(db.Integer)
+    #todo: update coords to postgis
+    #geo
     #ship_leads = db.relationships('')
     #managers = db.relationships('')
 
     def __repr__(self):
         return str(self.store_num)
 
-    def get_sales(self):
+    def get_metric(self,metric,crrnt_or_optml):
         pass
 
-    def get_sss(self):
+class Store_Distribution(db.Model):
+    __tablename__ = 'store_distribution'
+    id = db.Column(db.Integer, primary_key=True)
+    sku = db.Column(db.Integer, db.ForeignKey('skus.id')) #nullable
+    store_num = db.Column(db.Integer, db.ForeignKey('stores.id')) #nullable
+    ship_to_date = db.Column(db.Date)
+    units = db.Column(db.Integer)
+
+    def __repr__(self):
+        return 'Sku:{} - Store:{} - Units:{} - Shipped:{}'.format(self.sku,self.store_num,self.units,self.ship_to_date)
+    
+    def get_perf_list(self):
         pass
-
-
-# class Store_Distribution(db.Model):
-#     __tablename__ = 'store_distribution'
-#     id = db.Column(db.Integer, primary_key=True)
-#     sku = db.Column(db.Integer, db.ForeignKey('skus.id'), nullable=False)
-#     store_num = db.Column(db.Integer, db.ForeignKey('stores.id'), nullable=False)
-#     ship_to_date = db.Column(db.Date)
-#     units = db.Column(db.Integer)
-
-#     def __repr__(self):
-#         return 'Sku:{} - Store:{} - Units:{} - Shipped:{}'.format(self.sku,self.store_num,self.units,self.ship_to_date)
-
 
 class SKU(db.Model):
     __tablename__ = 'skus'
     id = db.Column(db.Integer, primary_key=True)
-    sku_num = db.Column(db.String(32), nullable=False, unique=True)
-    product_name = db.Column(db.String(64), nullable=False)
+    sku_num = db.Column(db.String(32), unique=True) #nullable
+    prod_name = db.Column(db.String(64)) #nullable
     brand = db.Column(db.String(64))
-    category = db.Column(db.Integer, db.ForeignKey('categories.id'))
-    org_price = db.Column(db.Integer, nullable=False)
-    current_price = db.Column(db.Integer, nullable=False)
-    opt_price= db.Column(db.Integer)
-    release = db.Column(db.Date)
+    cluster = db.Column(db.Integer, db.ForeignKey('clusters.id'))
+    subcategory = db.Column(db.Integer, db.ForeignKey('subcats.id'))
+    category = db.Column(db.Integer, db.ForeignKey('cats.id'))
+    org_price = db.Column(db.Integer) #nullable
+    current_price = db.Column(db.Integer) #nullable
+    launch_dt = db.Column(db.Date)
     phase_out = db.Column(db.Date)
     unit_cost = db.Column(db.Integer)
+    opt_price= db.Column(db.Integer)
     crrnt_gm_forecast = db.Column(db.Integer)
     optml_gm_forecast = db.Column(db.Integer)
-
+    crrnt_sales_forecast = db.Column(db.Integer)
+    optml_sales_forecast = db.Column(db.Integer)
+    crrnt_sellthru_forecast = db.Column(db.Integer)
+    optml_sellthru_forecast = db.Column(db.Integer)
+    lqdt_recommened = db.Column(db.Boolean, default=False)
+    on_market = db.Column(db.Boolean, default=False)
+    lqdt_price = db.Column(db.Integer)
+    lqdt_channel = db.Column(db.Integer, db.ForeignKey('channels.id'))
+    units_to_list = db.Column(db.Integer)
     #shipping dimensions
     #promotions
     #activechannels
     #features
-    
     def gm(self,price):
         return ((price - self.unit_cost)/self.unit_cost)
 
@@ -140,42 +159,41 @@ class SKU(db.Model):
     def gm_impact(self):
         return (self.optml_gm_forecast-self.crrnt_gm_forecast)
 
-    def days_past(self):
-        return 12
-    
     #Data Pulled from Optimization model#
-
-    def get_opt_price(self):
-        new_opt_price = self.current_price*.9
-        #todo: update from optmization model
-        self.opt_price = new_opt_price
-
-    def get_gm(self,which_price="optimal"):
-        if which_price == "optimal":
-            self.optml_gm_forecast = self.crrnt_gm_forecast*1.1
-        else:
-            self.optml_gm_forecast = self.crrnt_gm_forecast
-
-    def get_salethrough(self,which_price="optimal"):
-        return (date(2015,4,15) if "optimal" else date(2015,5,15))
-
-    def get_lqdt_score(self):
-        return (random.randint(0,10))
+    def get_metric(self,metric='gm',crrnt_or_optml='crrnt'):
+        info = _skus['skus'][0]['xo22']['forecasts'][metric][crrnt_or_optml]
+        return info
 
 
-class Category(db.Model):
-    __tablename__ = 'categories'
+    def get_lqdt_stat(self,stat):
+        pass
+
+
+class Cluster(db.Model):
+    __tablename__ = 'clusters'
     id = db.Column(db.Integer, primary_key=True)
-    category = db.Column(db.String(64), nullable=False)
+    name = db.Column(db.String(64)) #nullable
     skus = db.relationship('SKU', lazy='dynamic')
 
 
-# class SKU_Group(db.Model):
-# 	__tablename__ = 'skus'
-#     id = db.Column(db.Integer, primary_key=True)
-#     name
-#     skus(backref)
-#     category()
+class Subcategory(db.Model):
+    __tablename__ = 'subcats'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64)) #nullable
+    skus = db.relationship('SKU', lazy='dynamic')
+
+
+class Category(db.Model):
+    __tablename__ = 'cats'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64)) #nullable
+    skus = db.relationship('SKU', lazy='dynamic')
+
+
+class Channel(db.Model):
+    __tablename__ = 'channels'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64)) #nullable
 
 
 #Other Skipped classes: pricing_cluster, features

@@ -3,12 +3,15 @@ from . import main
 from ..models import SKU, Category
 from app import db
 from operator import itemgetter
+import numpy as np
+import pygal
+import random
 
-def get_categories():
-    cat_list = [(0,' All')]
-    for cat in db.session.query(Category).all():
-	    cat_list.append((cat.id,cat.category))
-    return sorted(cat_list,key=itemgetter(1))
+# def get_categories():
+#     cat_list = [(0,' All')]
+#     for cat in db.session.query(Category).all():
+# 	    cat_list.append((cat.id,cat.name))
+#     return sorted(cat_list,key=itemgetter(1))
 
 states = {
         'AK': 'Alaska',
@@ -76,3 +79,24 @@ def get_states():
 	    state_list.append((state,state))
 
     return sorted(state_list,key=itemgetter(0))
+
+def make_stackedbar(title,plan,forecast,opp):
+    # plt.style.use('ggplot')
+    assert title and plan and forecast and opp, "missing params"
+    bar_chart = pygal.StackedBar(style=pygal.style.LightColorizedStyle)
+    bar_chart.title = title
+    bar_chart.x_labels = ['Plan','Forecast']
+    bar_chart.add('Plan', [plan, None])
+    bar_chart.add('Forecast', [None, forecast])
+    bar_chart.add('Oppty', [None, opp])
+    return bar_chart.render(is_unicode=True)
+
+def make_wklybar(title,plan,forecast,opp):
+    # plt.style.use('ggplot')
+    assert title and plan and forecast and opp, "missing params"
+    bar_chart = pygal.StackedBar(style=pygal.style.LightColorizedStyle)
+    bar_chart.title = title
+    bar_chart.x_labels = map(str,range(12))
+    bar_chart.add('Actual', [10,12,8,14,12,11,0,0,0,0,0,0])
+    bar_chart.add('Forecast', [0,0,0,0,0,0,12,12,11,14,15,13])
+    return bar_chart.render(is_unicode=True)
