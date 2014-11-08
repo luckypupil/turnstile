@@ -10,6 +10,7 @@ from . import _skus, _stores, _sku_clusters, _store_distro, _categories
 @main.route('/')
 def dashboard():
     # Cat Info
+    Category = Category.query.get(7)
     graphs = {}
     graphs['sales'] = make_stackedbar("Sales($M)",30,28,5)
     graphs['gm'] = make_stackedbar('GM($M)',13,12,2.5)

@@ -97,8 +97,8 @@ class Store(db.Model):
     optml_gm_forecast = db.Column(db.Integer)
     crrnt_sales_forecast = db.Column(db.Integer)
     optml_sales_forecast = db.Column(db.Integer)
-    crrnt_unitssold_forecast = db.Column(db.Integer)
-    optml_unitssold_forecast = db.Column(db.Integer)
+    crrnt_sellthru_forecast = db.Column(db.Integer)
+    optml_sellthru_forecast = db.Column(db.Integer)
     #todo: update coords to postgis
     #geo
     #ship_leads = db.relationships('')
@@ -145,7 +145,7 @@ class SKU(db.Model):
     optml_sales_forecast = db.Column(db.Integer)
     crrnt_sellthru_forecast = db.Column(db.Integer)
     optml_sellthru_forecast = db.Column(db.Integer)
-    lqdt_recommened = db.Column(db.Boolean, default=False)
+    lqdt_recommended = db.Column(db.Boolean, default=False)
     on_market = db.Column(db.Boolean, default=False)
     lqdt_price = db.Column(db.Integer)
     lqdt_channel = db.Column(db.Integer, db.ForeignKey('channels.id'))

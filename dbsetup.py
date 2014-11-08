@@ -6,8 +6,16 @@ Models = {
 		'companies': ['name','street','city','state','zip'],
 		'segments': ['type'],
 		'channels': ['name'],
-		
-
+		'skus': ['sku_num','prod_name','brand','org_price','current_price','launch_dt',
+			'phase_out','unit_cost','opt_price','crrnt_gm_forecast','optml_gm_forecast',
+			'crrnt_sales_forecast','optml_sales_forecast','crrnt_sellthru_forecast','optml_sellthru_forecast',
+			'lqdt_recommended','on_market','lqdt_price','units_to_list'],
+		'stores': ['store_num','street','city','state',	'zip','warehouse','crrnt_gm_forecast','optml_gm_forecast',
+			'crrnt_sales_forecast','optml_sales_forecast','crrnt_sellthru_forecast','optml_sellthru_forecast'],
+		'subcats': ['name'],
+		'clusters':['name'],
+		'user_roles':['role'],
+		'users':['first_name','last_name','email','password','phone']
 		} 
 
 
@@ -24,10 +32,11 @@ def popdb(*tables):
     	copyit+=") FROM '/Users/blakeadams/Dev/turnstile/dbs/csv/{}.csv' DELIMITER ',' CSV;".format(table)
 
     copyit+= "COMMIT;"		
+    #print (copyit)
     cur.execute(copyit)
     conn.commit()
     cur.close()
     conn.close()
 
 if __name__ == '__main__':
-	popdb('categories','companies')
+	popdb('categories','companies','segments','channels','skus','stores','subcats','clusters','user_roles','users')
