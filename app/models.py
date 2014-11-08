@@ -52,12 +52,17 @@ class User(db.Model):
     def __repr__(self):
         return self.email
 
+categories = db.Table('cattable',
+    db.Column('category_id', db.Integer, db.ForeignKey('categories.id')),
+    db.Column('company_id', db.Integer, db.ForeignKey('companies.id')))
+
 
 class Company(db.Model):
     __tablename__ = 'companies'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64),) #nullable
-	#categories = db.Column(ManytoMany!)
+    categories = db.relationship('Category',secondary=categories, 
+        backref=db.backref('companies', lazy='dynamic'))
     segment = db.Column(db.Integer, db.ForeignKey('segments.id'))
     stores = db.relationship('Store', lazy='dynamic')
     users = db.relationship('User', lazy='dynamic')
@@ -127,7 +132,7 @@ class SKU(db.Model):
     brand = db.Column(db.String(64))
     cluster = db.Column(db.Integer, db.ForeignKey('clusters.id'))
     subcategory = db.Column(db.Integer, db.ForeignKey('subcats.id'))
-    category = db.Column(db.Integer, db.ForeignKey('cats.id'))
+    category = db.Column(db.Integer, db.ForeignKey('categories.id'))
     org_price = db.Column(db.Integer) #nullable
     current_price = db.Column(db.Integer) #nullable
     launch_dt = db.Column(db.Date)
@@ -172,28 +177,26 @@ class SKU(db.Model):
 class Cluster(db.Model):
     __tablename__ = 'clusters'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64)) #nullable
+    name = db.Column(db.String(64), unique=True) #nullable
     skus = db.relationship('SKU', lazy='dynamic')
 
 
 class Subcategory(db.Model):
     __tablename__ = 'subcats'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64)) #nullable
+    name = db.Column(db.String(64), unique=True) #nullable
     skus = db.relationship('SKU', lazy='dynamic')
 
 
 class Category(db.Model):
-    __tablename__ = 'cats'
+    __tablename__ = 'categories'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64)) #nullable
+    name = db.Column(db.String(64), unique=True) #nullable
     skus = db.relationship('SKU', lazy='dynamic')
 
 
 class Channel(db.Model):
     __tablename__ = 'channels'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64)) #nullable
-
-
+    name = db.Column(db.String(64), unique=True) #nullable
 #Other Skipped classes: pricing_cluster, features
