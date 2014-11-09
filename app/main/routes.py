@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, flash, url_for, make_response
 from . import main
-from ..models import SKU, Category, Store
+from ..models import SKU, Category, Store, Cluster
 from app import db
 from .forms import sku_list_search, sku_store_search
 from pprint import pprint as pp
@@ -10,15 +10,24 @@ from . import _skus, _stores, _sku_clusters, _store_distro, _categories
 @main.route('/')
 def dashboard():
     # Cat Info
-    Category = Category.query.get(7)
+    cat_skus = SKU.query.filter_by(category_id = 7).all()
+    salesP = sum(i.plan_sales_forecast for i in cat_skus)
+    salesC = sum(i.crrnt_sales_forecast for i in cat_skus)
+    salesO = sum(i.optml_sales_forecast for i in cat_skus)-salesC
+
+    gmP = sum(i.plan_gm_forecast for i in cat_skus)
+    gmC = sum(i.crrnt_gm_forecast for i in cat_skus)
+    gmO = sum(i.optml_gm_forecast for i in cat_skus)-gmC
+    # cat_clusters = Cluster.filter_by(category_id = 7).all()
     graphs = {}
-    graphs['sales'] = make_stackedbar("Sales($M)",30,28,5)
-    graphs['gm'] = make_stackedbar('GM($M)',13,12,2.5)
+    graphs['sales'] = make_stackedbar("Sales($K)",salesP,salesC,salesO)
+    graphs['gm'] = make_stackedbar('GM($K)',gmP,gmC,gmO)
     graphs['saleswk'] = make_wklybar("Sales($M)",30,28,5)
     graphs['gmwk'] = make_wklybar('GM($M)',13,12,2.5)
     
+    clusters = Cluster.query.filter_by(category_id = 7).limit(10).all()
     #test = mysku.get_metric('gm','crrnt')
-    return render_template("main/dashboard.html",message='hello world!', graphs=graphs)
+    return render_template("main/dashboard.html",message='hello world!', graphs=graphs, clusters=clusters)
 
 @main.route('/analysis', methods=["POST","GET"])
 def analysis():

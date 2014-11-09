@@ -38,10 +38,10 @@ class User(db.Model):
     last_name = db.Column(db.String(32))
     email = db.Column(db.String(64), unique=True) #nullable
     password = db.Column(db.String(64))#todo: add password hash#
-    company = db.Column(db.Integer, db.ForeignKey('companies.id'))
-    role = db.Column(db.Integer, db.ForeignKey('user_roles.id'))
+    company_id = db.Column(db.Integer, db.ForeignKey('companies.id'))
+    role_id = db.Column(db.Integer, db.ForeignKey('user_roles.id'))
     phone = db.Column(db.String(10))
-    store = db.Column(db.Integer, db.ForeignKey('stores.id'))
+    store_id = db.Column(db.Integer, db.ForeignKey('stores.id'))
     #toAdds:
     #category_permissions = db.Column(Manyto Many!)
     #category_admin = #
@@ -63,7 +63,7 @@ class Company(db.Model):
     name = db.Column(db.String(64),) #nullable
     categories = db.relationship('Category',secondary=categories, 
         backref=db.backref('companies', lazy='dynamic'))
-    segment = db.Column(db.Integer, db.ForeignKey('segments.id'))
+    segment_id = db.Column(db.Integer, db.ForeignKey('segments.id'))
     stores = db.relationship('Store', lazy='dynamic')
     users = db.relationship('User', lazy='dynamic')
     skus = db.relationship('User', lazy='dynamic')
@@ -84,7 +84,7 @@ class Company(db.Model):
 class Store(db.Model):
     __tablename__ = 'stores'
     id = db.Column(db.Integer, primary_key=True)
-    company = db.Column(db.Integer, db.ForeignKey('companies.id')) #nullable
+    company_id = db.Column(db.Integer, db.ForeignKey('companies.id')) #nullable
     store_num = db.Column(db.Integer)#nullable, May need to change to name
     street = db.Column(db.Text())
     city = db.Column(db.String(32))
@@ -113,8 +113,8 @@ class Store(db.Model):
 class Store_Distribution(db.Model):
     __tablename__ = 'store_distribution'
     id = db.Column(db.Integer, primary_key=True)
-    sku = db.Column(db.Integer, db.ForeignKey('skus.id')) #nullable
-    store_num = db.Column(db.Integer, db.ForeignKey('stores.id')) #nullable
+    sku_id = db.Column(db.Integer, db.ForeignKey('skus.id')) #nullable
+    store_id = db.Column(db.Integer, db.ForeignKey('stores.id')) #nullable
     ship_to_date = db.Column(db.Date)
     units = db.Column(db.Integer)
 
@@ -130,25 +130,28 @@ class SKU(db.Model):
     sku_num = db.Column(db.String(32), unique=True) #nullable
     prod_name = db.Column(db.String(64)) #nullable
     brand = db.Column(db.String(64))
-    cluster = db.Column(db.Integer, db.ForeignKey('clusters.id'))
-    subcategory = db.Column(db.Integer, db.ForeignKey('subcats.id'))
-    category = db.Column(db.Integer, db.ForeignKey('categories.id'))
+    cluster_id = db.Column(db.Integer, db.ForeignKey('clusters.id'))
+    subcategory_id = db.Column(db.Integer, db.ForeignKey('subcats.id'))
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
     org_price = db.Column(db.Integer) #nullable
     current_price = db.Column(db.Integer) #nullable
     launch_dt = db.Column(db.Date)
     phase_out = db.Column(db.Date)
     unit_cost = db.Column(db.Integer)
     opt_price= db.Column(db.Integer)
+    plan_gm_forecast = db.Column(db.Integer)
     crrnt_gm_forecast = db.Column(db.Integer)
     optml_gm_forecast = db.Column(db.Integer)
+    plan_sales_forecast = db.Column(db.Integer)
     crrnt_sales_forecast = db.Column(db.Integer)
     optml_sales_forecast = db.Column(db.Integer)
+    plan_sellthru_forecast = db.Column(db.Integer)
     crrnt_sellthru_forecast = db.Column(db.Integer)
     optml_sellthru_forecast = db.Column(db.Integer)
     lqdt_recommended = db.Column(db.Boolean, default=False)
     on_market = db.Column(db.Boolean, default=False)
     lqdt_price = db.Column(db.Integer)
-    lqdt_channel = db.Column(db.Integer, db.ForeignKey('channels.id'))
+    lqdt_channel_id = db.Column(db.Integer, db.ForeignKey('channels.id'))
     units_to_list = db.Column(db.Integer)
     #shipping dimensions
     #promotions
@@ -179,6 +182,7 @@ class Cluster(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True) #nullable
     skus = db.relationship('SKU', lazy='dynamic')
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
 
 
 class Subcategory(db.Model):
@@ -193,6 +197,7 @@ class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True) #nullable
     skus = db.relationship('SKU', lazy='dynamic')
+    clusters = db.relationship('Cluster', lazy='dynamic')
 
 
 class Channel(db.Model):

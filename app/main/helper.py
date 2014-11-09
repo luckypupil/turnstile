@@ -82,6 +82,9 @@ def get_states():
 
 def make_stackedbar(title,plan,forecast,opp):
     # plt.style.use('ggplot')
+    plan /= 100000
+    forecast /= 100000
+    opp /= 100000
     assert title and plan and forecast and opp, "missing params"
     bar_chart = pygal.StackedBar(style=pygal.style.LightColorizedStyle)
     bar_chart.title = title

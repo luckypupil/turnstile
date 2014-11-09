@@ -6,14 +6,14 @@ Models = {
 		'companies': ['name','street','city','state','zip'],
 		'segments': ['type'],
 		'channels': ['name'],
-		'skus': ['sku_num','prod_name','brand','org_price','current_price','launch_dt',
-			'phase_out','unit_cost','opt_price','crrnt_gm_forecast','optml_gm_forecast',
-			'crrnt_sales_forecast','optml_sales_forecast','crrnt_sellthru_forecast','optml_sellthru_forecast',
+		'skus': ['sku_num','prod_name','brand','cluster_id','subcategory_id','category_id','org_price','current_price','launch_dt',
+			'phase_out','unit_cost','opt_price','plan_gm_forecast','crrnt_gm_forecast','optml_gm_forecast','plan_sales_forecast',
+			'crrnt_sales_forecast','optml_sales_forecast','plan_sellthru_forecast','crrnt_sellthru_forecast','optml_sellthru_forecast',
 			'lqdt_recommended','on_market','lqdt_price','units_to_list'],
 		'stores': ['store_num','street','city','state',	'zip','warehouse','crrnt_gm_forecast','optml_gm_forecast',
 			'crrnt_sales_forecast','optml_sales_forecast','crrnt_sellthru_forecast','optml_sellthru_forecast'],
 		'subcats': ['name'],
-		'clusters':['name'],
+		'clusters':['name', 'category_id'],
 		'user_roles':['role'],
 		'users':['first_name','last_name','email','password','phone']
 		} 
