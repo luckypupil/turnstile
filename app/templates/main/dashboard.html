@@ -37,7 +37,7 @@
 			</th>
 			{% for cluster in clusters %}
 			<tr>
-				<td>{{ loop.index }}
+				<td>{{ loop.index }}</td>
 				<td>{{ cluster.name }}</td>
 				<td>{{ '$%dK' | format(100) }}</td>
 				<td>{{ '{0:0.1f}%'.format(10) }}</td>
