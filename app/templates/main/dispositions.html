@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block pagelabel %}Disposition List{% endblock %}
 {% block page_content %}
-<div class="col-md-10">
+<div class="col-md-9">
 	<div class="row table-responsive top-buffer">
 			<table class="table table-striped">
 				<th>
@@ -30,8 +30,8 @@
 			</table>
 	</div>
 </div>
-<div class="col-md-2">
-	<div class="row top-buffer">Watchlist</div>
+<div class="col-md-2 left-buffer">
+	<div class="row top-buffer"><center>Watchlist</center></div>
 		<div class="row top-buffer"><img src="{{ url_for('static',filename='img/coat1.jpeg') }}"> Caption</div>
 	<div class="row top-buffer">
 		<div class="row top-buffer"><img src="{{ url_for('static',filename='img/coat2.jpeg') }}"> Caption</div>

@@ -2,23 +2,26 @@
 {% block pagelabel %}My Dashboard{% endblock %}
 {% block page_content %}
 	<div class="row">
+		<span class="label label-primary">Actions
+			<span class="badge" style="height:75%;">5</span>
+		:</span>
+		<span class="label label-success left-buffer">+20M Sales</span>
+		<span class="label label-success left-buffer">+5M GM$</span>
+		<span class="label label-success left-buffer">8.5%+ Sellthrough</span>
+	</div>
+	<div class="row top-buffer">
 		<div class="col-md-12">
 			<div class="row">Performance Overview</div>
 			<div class="row">
-				<div class="col-md-5">{{graphs.sales|safe}}</div>
-				<div class="col-md-5">{{graphs.gm|safe}}</div>
-				<div class="col-md-1">
-					<div class="row">+20M Sales</div>
-					<div class="row">+5M GM$</div>
-					<div class="row">Sellthrough</div>
-				</div>
+				<div class="col-md-6">{{graphs.sales|safe}}</div>
+				<div class="col-md-6">{{graphs.gm|safe}}</div>
 			</div>
 		</div>
-		<div class="col-md-12">
+		<div class="col-md-12 top-buffer">
 			<div class="row">Performance by Week</div>
 			<div class="row">
-				<div class="col-md-5">{{graphs.saleswk|safe}}</div>
-				<div class="col-md-5">{{graphs.gmwk|safe}}</div>
+				<div class="col-md-6">{{graphs.saleswk|safe}}</div>
+				<div class="col-md-6">{{graphs.gmwk|safe}}</div>
 			</div>
 		</div>			
 	</div>
