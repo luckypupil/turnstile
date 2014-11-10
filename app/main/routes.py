@@ -66,8 +66,8 @@ def stores():
 def dispositions():
 	return render_template("main/dispositions.html",message='hello world!')
 
-@main.route('/disposition/<product>')
-def dispo_profile(product):
+@main.route('/disposition/profile')
+def dispo_profile():
 	return render_template("main/dispo_profile.html",message='hello world!')
 
 

@@ -1,5 +1,68 @@
 {% extends "base.html" %}
 {% block pagelabel %}Dipsoition Business Case{% endblock %}
 {% block page_content %}
-	
+<div class="col-md-12">
+	<div class="row">
+		<div class="col-md-5">
+			<img src="{{ url_for('static',filename='img/coat1.jpeg') }}">
+		</div>
+		<div class="col-md-6">
+			<div class="row">
+				{{ 'SKU: 101A' }}
+			</div>
+			<div class="row top-buffer">
+				{{ " Men's Professional black M" }}
+			</div>
+			<div class="row top-buffer">
+				<button type="submit" class="btn btn-default">List</button>
+			</div>
+		</div>
+	</div>
+	<div class="row top-buffer">
+		<div class="col-md-5">
+			<h4>Financials:</h4>
+		<div class="row table-responsive">
+			<table class="table table-striped">
+				<tr>
+					<td>Recommended Price</td>
+					<td>{{ '$56' }}</td>
+				</tr>
+				<tr>
+					<td>Incremental Sales</td>
+					<td>{{ '$700' }}</td>
+				</tr>
+				<tr>
+					<td>Incremental GM</td>
+					<td>{{ '$350' }}</td>
+				</tr>
+				<tr>
+					<td>Fully Loaded GM/Unit</td>
+					<td>{{ '30%' }}</td>
+				</tr>
+			</table>
+		</div>
+		</div>
+		<div class="col-md-5 left-buffer">
+			<h4>Logistics:</h4>
+		<div class="row table-responsive">
+			<table class="table table-striped">
+				<tr>
+					<td>Recommended Price</td>
+					<td>{{ '$56' }}</td>
+				</tr>
+				<tr>
+					<td>Recommended Price</td>
+					<td>{{ '$56' }}</td>
+				</tr>
+				<tr>
+					<td>Recommended Price</td>
+					<td>{{ '$56' }}</td>
+				</tr>
+				<tr>
+					<td>Recommended Price</td>
+					<td>{{ '$56' }}</td>
+				</tr>
+			</table>		
+	</div>
+</div>
 {% endblock %}

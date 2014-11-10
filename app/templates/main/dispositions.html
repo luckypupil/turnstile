@@ -23,12 +23,19 @@
 					<td>{{ 250 }}</td>
 					<td>{{ '$%d' | format(60) }}</td>
 					<td>{{ '$%d' | format(55) }}</td>
-					<td><input type="text"></td>
+					<td><input type="text" class="form-control dispoP" placeholder="{{ '$%d' | format(60) }}"></td>
 					<td><input type="checkbox"></td>
 				</tr>
 				{#{% endfor %}#}
 			</table>
 	</div>
 </div>
-<div class="col-md-2">Watchlist</div>
+<div class="col-md-2">
+	<div class="row top-buffer">Watchlist</div>
+		<div class="row top-buffer"><img src="{{ url_for('static',filename='img/coat1.jpeg') }}"> Caption</div>
+	<div class="row top-buffer">
+		<div class="row top-buffer"><img src="{{ url_for('static',filename='img/coat2.jpeg') }}"> Caption</div>
+	</div>
+</div>
+
 {% endblock %}
