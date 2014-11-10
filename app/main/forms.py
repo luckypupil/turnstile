@@ -6,8 +6,8 @@ from .helper import get_states
 
 
 class sku_list_search(Form):
-    category = SelectField('Category', choices=['test1','test2'],coerce=int)
-    sku = StringField('Search')
+    cluster = SelectField('Cluster', choices=[(1,'cluster1'),(2,'cluster2')],coerce=int)
+    test_price = StringField('Price')
 
 class sku_store_search(Form):
     state = SelectField('State', choices=get_states())

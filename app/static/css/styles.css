@@ -17,3 +17,7 @@
 .dispoP {
 	width: 70%;
 }
+
+.border-bottom {
+	border-bottom: .25rem dotted lightgray;
+}

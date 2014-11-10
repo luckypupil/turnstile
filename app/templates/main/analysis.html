@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block pagelabel %}Sku List{% endblock %}
 {% block page_content %}
+<div class="col-md-12">
 	{#{% block searchfield %}
 	<div class="row">
 		<div class="col-md-6"><small>{{ 'Results: {}'.format(results) }}</small></div>
@@ -30,17 +31,69 @@
 		</div>
 	
 		<div class="col-md-8">
-			<div class="row">
-				<div class="row">
-					Search:
-					Reco price action:
-					Price action
+			<div class="panel panel-default">
+  				<div class="panel-heading">
+    				<h3 class="panel-title">Analytics</h3>
+  				</div>
+  			<div class="panel-body">
+						<div class="row">
+							<form role="form" method="POST" name="stores" action="{{ url_for('.analysis') }}">
+					            	{{ form.csrf_token }}
+								<div class="col-md-2">
+						            <div class="form-group">
+						    			{{ form.cluster(class="form-control",placeholder="category") }}
+						    		</div>
+						    	</div>
+						    	<div class="col-md-4">
+						    		Reco price action: {{ '(15%)' }}
+						    	</div>
+						    	<div class="col-md-2">
+						    		<div class="form-group">
+						    			{{ form.test_price(class="form-control",placeholder="price") }}
+						    		</div>
+						    	</div>
+						    	<div class="col-md-2">
+						    		<div class="form-group">
+						    			<button type="submit" class="btn btn-default">Submit</button>
+						    		</div>
+						    	</div>
+					          </form>
+						</div>
+						<div class="row border-bottom">
+							<div class="col-md-6">
+								Price action by store cluster 
+							</div>
+							<div class="col-md-6">
+								Markdown $ spent: {{ '$232K' }}
+							</div>
+						</div>		
+						<div class="row">
+								<div class="col-md-6"><h5>Pricing Inputs</h5></div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">Avg temp:  {{ '74' }}</div>
+							<div class="col-md-3">Aggressiveness:  {{ '5' }}</div>
+							<div class="col-md-6">Markdown Tier:  {{ '3' }}</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">On promo:  {{ '74' }}</div>
+							<div class="col-md-3">Seasonality:  {{ '5' }}</div>
+							<div class="col-md-6">Markdown Tier:  {{ '3' }}</div>
+						</div>
+						<div class="row border-bottom">
+							<div class="col-md-3">National ad:  {{ '74' }}</div>
+							<div class="col-md-3">Aggressiveness:  {{ '5' }}</div>
+							<div class="col-md-6">Markdown Tier:  {{ '3' }}</div>
+						</div>
+						<div class="row top-buffer">
+							<div class="col-md-3">Sales:  {{ '$5M' }}</div>
+							<div class="col-md-3">GM:  {{ '$2M' }}</div>
+							<div class="col-md-6">Sell-Through:  {{ '72%' }}</div>
+						</div>			
 				</div>
-				<div class="row">
-					Price action by store cluster
-					Markdown $ spent:
-				</div>				
 			</div>
+			</div>
+			
 			<div class="row">
 				<div class="row"></div>
 				<div class="row"></div>
@@ -84,5 +137,6 @@
 			</table>
 		</div>
 	</div>
+</div>
 	{% endblock %}
 {% endblock %}
