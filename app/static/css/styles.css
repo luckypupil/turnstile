@@ -3,7 +3,9 @@
 .block-container {
 	margin-bottom: 75px;
 }
-
+.block-color {
+	background-color: aliceblue;
+}
 .page-header {
 	margin-top: 5px;
 }
@@ -20,4 +22,8 @@
 
 .border-bottom {
 	border-bottom: .25rem dotted lightgray;
+}
+
+.no-bottom {
+	margin-bottom: 0px
 }

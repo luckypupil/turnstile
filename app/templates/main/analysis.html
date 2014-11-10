@@ -1,4 +1,14 @@
 {% extends "base.html" %}
+{% block head %}
+	{{ super() }}
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/slider.css') }}">
+	<script src="{{ url_for('static',filename='js/bootstrap-slider.js') }}"></script>
+	<script>
+	    $(document).ready(function(){
+			$('.slider').slider()
+	  	});
+	</script>
+{% endblock %}
 {% block pagelabel %}Sku List{% endblock %}
 {% block page_content %}
 <div class="col-md-12">
@@ -31,7 +41,7 @@
 		</div>
 	
 		<div class="col-md-8">
-			<div class="panel panel-default">
+			<div class="panel panel-default block-color">
   				<div class="panel-heading">
     				<h3 class="panel-title">Analytics</h3>
   				</div>
@@ -70,25 +80,57 @@
 						<div class="row">
 								<div class="col-md-6"><h5>Pricing Inputs</h5></div>
 						</div>
-						<div class="row">
-							<div class="col-md-3">Avg temp:  {{ '74' }}</div>
-							<div class="col-md-3">Aggressiveness:  {{ '5' }}</div>
-							<div class="col-md-6">Markdown Tier:  {{ '3' }}</div>
-						</div>
-						<div class="row">
-							<div class="col-md-3">On promo:  {{ '74' }}</div>
-							<div class="col-md-3">Seasonality:  {{ '5' }}</div>
-							<div class="col-md-6">Markdown Tier:  {{ '3' }}</div>
-						</div>
 						<div class="row border-bottom">
-							<div class="col-md-3">National ad:  {{ '74' }}</div>
-							<div class="col-md-3">Aggressiveness:  {{ '5' }}</div>
-							<div class="col-md-6">Markdown Tier:  {{ '3' }}</div>
+							<div class="col-md-3">
+									<p>Avg temp:<span class="badge left-buffer">{{ '74' }}</span></p>
+									<p>On promo:<span class="badge left-buffer">{{ 'yup' }}</span></p>
+									<p>Nat'l ad:     <span class="badge left-buffer">{{ 'nope' }}</span></p>
+							</div>
+							<div class="col-md-3">
+								<p>Aggressiveness: </p>
+								<p class=".slider"></p>
+								<p>Seasonality: </p>
+								<p class=".slider"></p>
+							</div>
+							<div class="col-md-6">
+								Markdown Tier:  {{ '3' }}
+								<div class="row table-responsive">
+									<table class="table">
+										<th>
+											<td>Week</td>
+											<td>Offer</td>
+											<td>Sales</td>
+											<td>Unit Lift</td>
+										</th>
+										{#{% for cluster in clusters %}#}
+										<tr>
+											<td>{{ '' }}</td>
+											<td>{{ '2' }}</td>
+											<td>{{ '15%' }}{{ 'off' }}</td>
+											<td>{{ '$10M' }}</td>
+											<td>{{ '35' }}</td>
+										</tr>
+										<tr>
+											<td>{{ '' }}</td>
+											<td>{{ '6' }}</td>
+											<td>{{ '35%' }}{{ 'off' }}</td>
+											<td>{{ '$10M' }}</td>
+											<td>{{ '60' }}</td>
+										</tr>
+										{#{% endfor %}#}
+									</table>
+								</div>
+							</div>
 						</div>
 						<div class="row top-buffer">
 							<div class="col-md-3">Sales:  {{ '$5M' }}</div>
 							<div class="col-md-3">GM:  {{ '$2M' }}</div>
-							<div class="col-md-6">Sell-Through:  {{ '72%' }}</div>
+							<div class="col-md-3">Sell-Through:  {{ '72%' }}</div>
+							<div class="col-md-3">
+								<div class="form-group no-bottom">
+							    	<button type="submit" class="btn btn-default">Add to list</button>
+							    </div>
+							</div>
 						</div>			
 				</div>
 			</div>
@@ -133,7 +175,25 @@
 					<td>{{ '70%' }}</td>
 					<td><input type="submit" value="remove" class="form-control dispoP"></td>
 				</tr>
+				<tr>
+					<td></td>
+					<td>{{ "Men's Trench I" }}</td>
+					<td>{{ '$9M' }}</td>
+					<td>{{ '$2M' }}</td>
+					<td>{{ '75' }}</td>
+					<td>{{ '67%' }}</td>
+					<td><input type="submit" value="remove" class="form-control dispoP"></td>
+				</tr>
 				{#{% endfor %}#}
+				<tr>
+					<td></td>
+					<td><b>{{ "Total Impact" }}</b></td>
+					<td><b>{{ '$19M' }}</b></td>
+					<td><b>{{ '$5M' }}</b></td>
+					<td><b>{{ '150' }}</b></td>
+					<td><b>{{ '68.5%' }}</b></td>
+					<td><input type="submit" value="remove" class="form-control dispoP"></td>
+				</tr>
 			</table>
 		</div>
 	</div>
