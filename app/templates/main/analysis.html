@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block pagelabel %}Sku List{% endblock %}
 {% block page_content %}
-	{% block searchfield %}
+	{#{% block searchfield %}
 	<div class="row">
 		<div class="col-md-6"><small>{{ 'Results: {}'.format(results) }}</small></div>
 		<form role="form" method="POST" name="analysis" action="{{ url_for('.analysis') }}">
@@ -23,43 +23,66 @@
 	    	</div>
           </form>
 	</div>
-	{% endblock %}
+	{% endblock %}#}
+	<div class="row">
+		<div class="col-md-4">
+			
+		</div>
+	
+		<div class="col-md-8">
+			<div class="row">
+				<div class="row">
+					Search:
+					Reco price action:
+					Price action
+				</div>
+				<div class="row">
+					Price action by store cluster
+					Markdown $ spent:
+				</div>				
+			</div>
+			<div class="row">
+				<div class="row"></div>
+				<div class="row"></div>
+				<div class="row"></div>
+				<div class="row"></div>
+			</div>
+			<div class="row">
+				
+			</div>
+		</div>
+	</div>	
+	
+
 	{% block table %}
 	<div class="row table-responsive">
-		<table class="table table-striped">
-			<th>
-				
-				<td>SKU</td>
-				<td>Product</td>
-				<td>Brand</td>
-				<td>Opt Price</td>
-				<td>Crnt Price</td>
-				<td>Dffrnc($)</td>
-				<td>Opt GM</td>
-				<td>Crnnt GM</td>
-				<td>Impact($K)</td>
-				<td>Units</td>
-				<td>Phase Out</td>
-				<td>Days Past</td>
-			</th>
-			{% for sku in skus %}
-			<tr>
-				<td>{{ loop.index }}</td>
-				<td>{{ sku.sku_num }}</td>
-				<td>{{ sku.product_name }}</td>
-				<td>{{ sku.brand }}</td>
-				<td>{{ '$%d' | format(sku.opt_price/100) }}</td>
-				<td>{{ '$%d' | format(sku.current_price/100) }}</td>
-				<td>{{ '$%d' | format(sku.price_diff()/100) }}</td>
-				<td>{{ '{0:0.1f}%'.format(sku.gm(sku.opt_price)*100) }}</td>
-				<td>{{ '{0:0.1f}%'.format(sku.gm(sku.current_price)*100) }}</td>
-				<td>{{ '$%d' | format(sku.gm_impact()/100) }}</td>
-				<td> {{ 500 }}</td>
-				<td>{{ sku.phase_out }}</td>
-				<td>{{ sku.days_past() }}</td>
-			</tr>
-			{% endfor %}
-		</table>
+		<div class="col-md-4">
+			<h4>Scenario Analysis</h4>
+			<p>Evaluate the impact of selected actions on sales & margin</p>
+		</div>
+		<div class="col-md-8">
+			<table class="table table-striped">
+				<th>
+					<td>Cluster</td>
+					<td>Sales</td>
+					<td>GM</td>
+					<td>Units</td>
+					<td>Sell Through</td>
+					<td>Action</td>
+				</th>
+				{#{% for sku in skus %}#}
+				<tr>
+					<td></td>
+					<td>{{ "Men's Trench I" }}</td>
+					<td>{{ '$10M' }}</td>
+					<td>{{ '$3M' }}</td>
+					<td>{{ '75' }}</td>
+					<td>{{ '70%' }}</td>
+					<td><input type="submit" value="remove" class="form-control dispoP"></td>
+				</tr>
+				{#{% endfor %}#}
+			</table>
+		</div>
 	</div>
 	{% endblock %}
 {% endblock %}
