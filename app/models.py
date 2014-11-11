@@ -5,6 +5,7 @@ from datetime import date
 from app import db
 from .main import _skus, _stores, _sku_clusters, _store_distro, _categories
 import requests
+from sqlalchemy import func
 
 class User_Role(db.Model):
     __tablename__ = 'user_roles'
@@ -222,8 +223,40 @@ class SKU(db.Model):
         self.cluster_id = cluster_id
         self.category_id = category_id
 
+    def __repr__(self):
+        return "SKU: {}".format(self.prod_nm)
 
-    
+    def get_units(self):
+        units = db.session.query(func.sum(Store_Distribution.units)).filter(Store_Distribution.sku_id == self.id).first()
+        return units[0]
+
+    def get_sales(self,scenario="current"):
+        if scenario == "current":
+            sales = db.session.query(func.sum(Store_Distribution.crrnt_sales_fc)).filter(Store_Distribution.sku_id == self.id).first()
+        elif scenario == "plan":
+            sales = db.session.query(func.sum(Store_Distribution.plan_sales_fc)).filter(Store_Distribution.sku_id == self.id).first()
+        else:
+            sales = db.session.query(func.sum(Store_Distribution.optml_sales_fc)).filter(Store_Distribution.sku_id == self.id).first()
+        return sales[0]
+
+    def get_gm(self,scenario="current"):
+        if scenario == "current":
+            gm = db.session.query(func.sum(Store_Distribution.crrnt_gm_fc)).filter(Store_Distribution.sku_id == self.id).first()
+        elif scenario == "plan":
+            gm = db.session.query(func.sum(Store_Distribution.plan_gm_fc)).filter(Store_Distribution.sku_id == self.id).first()
+        else:
+            gm = db.session.query(func.sum(Store_Distribution.optml_gm_fc)).filter(Store_Distribution.sku_id == self.id).first()
+        return gm[0]
+
+    def get_sellthru(self,scenario="current"):
+        if scenario == "current":
+            sellthru = db.session.query(func.sum(Store_Distribution.crrnt_sellthru_fc)).filter(Store_Distribution.sku_id == self.id).first()
+        elif scenario == "plan":
+            sellthru = db.session.query(func.sum(Store_Distribution.plan_sellthru_fc)).filter(Store_Distribution.sku_id == self.id).first()
+        else:
+            sellthru = db.session.query(func.sum(Store_Distribution.optml_sellthru_fc)).filter(Store_Distribution.sku_id == self.id).first()
+        return sellthru[0]
+
     def lqdt_store(self):
         pass
     
@@ -233,19 +266,12 @@ class SKU(db.Model):
     def gm(self,price):
         return ((price - self.unit_cost)/self.unit_cost)
 
-    def price_diff(self):
-        """Difference($) between current price and optimal price"""
-        return (self.opt_price-self.current_price)
-	
-    def gm_impact(self):
-        return (self.optml_gm_fc-self.crrnt_gm_fc)
-
-    #Data Pulled from Optimization model#
-    def get_metric(self,metric='gm',crrnt_or_optml='crrnt'):
-        info = _skus['skus'][0]['xo22']['fcs'][metric][crrnt_or_optml]
-        return info
-
-
+    # def get_clust_met(skus):
+    #     units = 0
+    #     for sku in skus:
+    #         units+=get_sku_units(sku.id)
+    
+        return units
     def get_lqdt_stat(self,stat):
         pass
 
@@ -261,7 +287,37 @@ class Cluster(db.Model):
         self.name = name
         self.category_id = category_id
 
+    def __repr__(self):
+        return "Cluster: {}".format(self.name)
 
+    def get_metric(self,scenario="current",metric="sales"):
+        ### Metric options: 'gm','sellthru','units','sales'###
+        total = 0
+        if metric == "gm":
+            for sku in self.skus.all():
+                total+=sku.get_gm(scenario)
+        elif metric == "sellthru":
+            count = 0
+            for sku in self.skus.all():
+                total+=sku.get_sellthru(scenario)
+                count+=1
+                total/=count
+
+        elif metric == "units":
+            for sku in self.skus.all():
+                total+=sku.get_units(scenario)
+        
+        else:
+            for sku in self.skus.all():
+                total+=sku.get_sales(scenario)
+        
+        return total
+
+    def chg_plan(self,metric="sales"):
+        ### Current metrics relative to plan###
+        change = (self.get_metric(metric=metric) - self.get_metric(metric=metric,scenario="plan"))/self.get_metric(metric=metric,scenario="plan")
+        return change
+        
 class Category(db.Model):
     __tablename__ = 'categories'
     id = db.Column(db.Integer, primary_key=True)
@@ -271,6 +327,8 @@ class Category(db.Model):
     def __init__(self,name):
         self.name = name
 
+    def __repr__(self):
+        return "Category: {}".format(self.name)
 
 class Channel(db.Model):
     __tablename__ = 'channels'

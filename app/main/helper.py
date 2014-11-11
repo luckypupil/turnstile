@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 from . import main
-from ..models import SKU, Category
+from ..models import SKU, Category, Store_Distribution
 from app import db
 from operator import itemgetter
 import numpy as np
 import pygal
 import random
+from sqlalchemy import func
 
 # def get_categories():
 #     cat_list = [(0,' All')]
@@ -79,6 +80,21 @@ def get_states():
 	    state_list.append((state,state))
 
     return sorted(state_list,key=itemgetter(0))
+
+
+def get_sku_units(skuid=5):
+    units = db.session.query(func.sum(Store_Distribution.units)).filter(Store_Distribution.sku_id == skuid).first()
+    return units
+
+
+
+def get_clust_met(skus):
+    units = 0
+    for sku in skus:
+        units+=get_sku_units(sku.id)
+    
+    return units
+
 
 def make_stackedbar(title,plan,forecast,opp):
     # plt.style.use('ggplot')

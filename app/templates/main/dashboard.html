@@ -13,15 +13,15 @@
 		<div class="col-md-12">
 			<div class="row">Performance Overview</div>
 			<div class="row">
-				<div class="col-md-6">{{graphs.sales|safe}}</div>
-				<div class="col-md-6">{{graphs.gm|safe}}</div>
+				{#<div class="col-md-6">{{graphs.sales|safe}}</div>
+				<div class="col-md-6">{{graphs.gm|safe}}</div>#}
 			</div>
 		</div>
 		<div class="col-md-12 top-buffer">
 			<div class="row">Performance by Week</div>
 			<div class="row">
-				<div class="col-md-6">{{graphs.saleswk|safe}}</div>
-				<div class="col-md-6">{{graphs.gmwk|safe}}</div>
+				{#<div class="col-md-6">{{graphs.saleswk|safe}}</div>
+				<div class="col-md-6">{{graphs.gmwk|safe}}</div>#}
 			</div>
 		</div>			
 	</div>
@@ -42,7 +42,7 @@
 			<tr>
 				<td>{{ loop.index }}</td>
 				<td>{{ cluster.name }}</td>
-				<td>{{ '$%dK' | format(100) }}</td>
+				<td>{{ '$%d' | format(cluster.chg_plan()) }}</td>
 				<td>{{ '{0:0.1f}%'.format(10) }}</td>
 				<td>{{ '{0:0.1f}%'.format(7) }}</td>
 				<td>{{ '{0:0.1f}%'.format(-20) }}</td>
