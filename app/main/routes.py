@@ -7,26 +7,22 @@ from pprint import pprint as pp
 from .helper import make_stackedbar, make_wklybar
 from random import randint
 
-@main.route('/')
-def dashboard():
-    # Cat Info
-    category = Category.query.get(7)
-    clusters = category.clusters.all()
-    clusters = filter(lambda x: x.metric() > 0, clusters)
+category = Category.query.get(7)
+clusters = category.clusters.all()
+clusters = filter(lambda x: x.metric() > 0, clusters)
 
-    #cluster info
-
-    graphs = {}
-    graphs['sales'] = make_stackedbar("Sales($K)",category.metric(scenario="plan"),
+graphs = {}
+graphs['sales'] = make_stackedbar("Sales($K)",category.metric(scenario="plan"),
                                         category.metric(scenario="crrnt"),
                                         category.metric(scenario="optml")-category.metric(scenario="crrnt"))
-    graphs['gm'] = make_stackedbar("gm($K)",category.metric(metric='gm',scenario="plan"),
+graphs['gm'] = make_stackedbar("GM($K)",category.metric(metric='gm',scenario="plan"),
                                         category.metric(metric='gm',scenario="crrnt"),
                                         category.metric(metric='gm',scenario="optml")-category.metric(metric='gm',scenario="crrnt"))
-    graphs['saleswk'] = make_wklybar("Sales($M)",30,28,5)
-    graphs['gmwk'] = make_wklybar('GM($M)',13,12,2.5)
-    
-    #test = mysku.metric('gm','crrnt')
+graphs['saleswk'] = make_wklybar("Sales($M)",30,28,5)
+graphs['gmwk'] = make_wklybar('GM($M)',13,12,2.5)
+
+@main.route('/')
+def dashboard():
     return render_template("main/dashboard.html",message='hello world!',graphs=graphs,clusters=clusters,category=category,randint=randint)
 
 @main.route('/analysis', methods=["POST","GET"])
@@ -40,7 +36,7 @@ def analysis():
         else:
            skus = (skus if not cat_id else db.session.query(SKU).filter(SKU.category == cat_id).all())
 
-    return render_template("main/analysis.html",skus=skus, form=form,results=len(skus))
+    return render_template("main/analysis.html",skus=skus, form=form,results=len(skus),graphs=graphs)
 
 
 @main.route('/analysis', methods=["POST", "GET"])

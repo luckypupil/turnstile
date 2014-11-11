@@ -37,7 +37,12 @@
 	{% endblock %}#}
 	<div class="row">
 		<div class="col-md-4">
-			
+			<div class="row">
+				<div class="col-md-12">{{graphs.sales|safe}}</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">{{graphs.gm|safe}}</div>
+			</div>
 		</div>
 	
 		<div class="col-md-8">
