@@ -230,32 +230,45 @@ class SKU(db.Model):
         units = db.session.query(func.sum(Store_Distribution.units)).filter(Store_Distribution.sku_id == self.id).first()
         return units[0]
 
-    def get_sales(self,scenario="current"):
-        if scenario == "current":
-            sales = db.session.query(func.sum(Store_Distribution.crrnt_sales_fc)).filter(Store_Distribution.sku_id == self.id).first()
+    def get_sales(self,scenario="crrnt"):
+        assert isinstance(scenario,str), TypeError('Scenario arg must be a string')
+
+        if scenario == "optml":
+            sales = db.session.query(func.sum(Store_Distribution.optml_sales_fc)).filter(Store_Distribution.sku_id == self.id).first()
         elif scenario == "plan":
             sales = db.session.query(func.sum(Store_Distribution.plan_sales_fc)).filter(Store_Distribution.sku_id == self.id).first()
+        elif scenario == "crrnt":
+            sales = db.session.query(func.sum(Store_Distribution.crrnt_sales_fc)).filter(Store_Distribution.sku_id == self.id).first()
         else:
-            sales = db.session.query(func.sum(Store_Distribution.optml_sales_fc)).filter(Store_Distribution.sku_id == self.id).first()
+            raise ValueError('Invalid scenario specified')
         return sales[0]
 
-    def get_gm(self,scenario="current"):
-        if scenario == "current":
-            gm = db.session.query(func.sum(Store_Distribution.crrnt_gm_fc)).filter(Store_Distribution.sku_id == self.id).first()
+    def get_gm(self,scenario="crrnt"):
+        assert isinstance(scenario,str), TypeError('Scenario arg must be a string')
+
+        if scenario == "optml":
+            gm = db.session.query(func.sum(Store_Distribution.optml_gm_fc)).filter(Store_Distribution.sku_id == self.id).first()
         elif scenario == "plan":
             gm = db.session.query(func.sum(Store_Distribution.plan_gm_fc)).filter(Store_Distribution.sku_id == self.id).first()
+        elif scenario == "crrnt":
+            gm = db.session.query(func.sum(Store_Distribution.crrnt_gm_fc)).filter(Store_Distribution.sku_id == self.id).first()
         else:
-            gm = db.session.query(func.sum(Store_Distribution.optml_gm_fc)).filter(Store_Distribution.sku_id == self.id).first()
+            raise ValueError('Invalid scenario specified')
         return gm[0]
 
-    def get_sellthru(self,scenario="current"):
-        if scenario == "current":
-            sellthru = db.session.query(func.sum(Store_Distribution.crrnt_sellthru_fc)).filter(Store_Distribution.sku_id == self.id).first()
+    def get_sellthru(self,scenario="crrnt"):
+        # Currently simple average.  Will eventually need to make wieghted avg across stores based on inventory
+        assert isinstance(scenario,str), TypeError('Scenario arg must be a string')
+        if scenario == "optml":
+            totsellthru = db.session.query(func.sum(Store_Distribution.optml_sellthru_fc)).filter(Store_Distribution.sku_id == self.id).first()
         elif scenario == "plan":
-            sellthru = db.session.query(func.sum(Store_Distribution.plan_sellthru_fc)).filter(Store_Distribution.sku_id == self.id).first()
+            totsellthru = db.session.query(func.sum(Store_Distribution.plan_sellthru_fc)).filter(Store_Distribution.sku_id == self.id).first()
+        elif scenario == "crrnt":
+            totsellthru = db.session.query(func.sum(Store_Distribution.crrnt_sellthru_fc)).filter(Store_Distribution.sku_id == self.id).first()
         else:
-            sellthru = db.session.query(func.sum(Store_Distribution.optml_sellthru_fc)).filter(Store_Distribution.sku_id == self.id).first()
-        return sellthru[0]
+            raise ValueError('Invalid scenario specified')
+
+        return totsellthru[0] / db.session.query(func.count(Store_Distribution.optml_sellthru_fc)).filter(Store_Distribution.sku_id == self.id).first()[0]
 
     def lqdt_store(self):
         pass
@@ -290,9 +303,12 @@ class Cluster(db.Model):
     def __repr__(self):
         return "Cluster: {}".format(self.name)
 
-    def get_metric(self,scenario="current",metric="sales"):
+    def get_metric(self,metric="sales",scenario="crrnt"):
         ### Metric options: 'gm','sellthru','units','sales'###
+        assert isinstance(scenario,str) and isinstance(metric,str), TypeError('Scenario & metric args must be type string')
+        
         total = 0
+        
         if metric == "gm":
             for sku in self.skus.all():
                 total+=sku.get_gm(scenario)
@@ -302,12 +318,10 @@ class Cluster(db.Model):
                 total+=sku.get_sellthru(scenario)
                 count+=1
                 total/=count
-
         elif metric == "units":
             for sku in self.skus.all():
-                total+=sku.get_units(scenario)
-        
-        else:
+                total+=sku.get_units()
+        elif metric == 'sales':
             for sku in self.skus.all():
                 total+=sku.get_sales(scenario)
         
@@ -315,7 +329,7 @@ class Cluster(db.Model):
 
     def chg_plan(self,metric="sales"):
         ### Current metrics relative to plan###
-        change = (self.get_metric(metric=metric) - self.get_metric(metric=metric,scenario="plan"))/self.get_metric(metric=metric,scenario="plan")
+        change = (self.get_metric(metric) - self.get_metric(metric,"plan"))/self.get_metric(metric,"plan")
         return change
         
 class Category(db.Model):
