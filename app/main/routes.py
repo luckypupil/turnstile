@@ -5,29 +5,29 @@ from app import db
 from .forms import sku_list_search, sku_store_search
 from pprint import pprint as pp
 from .helper import make_stackedbar, make_wklybar
-
+from random import randint
 
 @main.route('/')
 def dashboard():
     # Cat Info
     category = Category.query.get(7)
     clusters = category.clusters.all()
+    clusters = filter(lambda x: x.metric() > 0, clusters)
 
     #cluster info
 
-
-    # gmP = sum(i.plan_gm_forecast for i in cat_skus)
-    # gmC = sum(i.crrnt_gm_forecast for i in cat_skus)
-    # gmO = sum(i.optml_gm_forecast for i in cat_skus)-gmC
-    # # cat_clusters = Cluster.filter_by(category_id = 7).all()
-    # graphs = {}
-    # graphs['sales'] = make_stackedbar("Sales($K)",salesP,salesC,salesO)
-    # graphs['gm'] = make_stackedbar('GM($K)',gmP,gmC,gmO)
-    # graphs['saleswk'] = make_wklybar("Sales($M)",30,28,5)
-    # graphs['gmwk'] = make_wklybar('GM($M)',13,12,2.5)
+    graphs = {}
+    graphs['sales'] = make_stackedbar("Sales($K)",category.metric(scenario="plan"),
+                                        category.metric(scenario="crrnt"),
+                                        category.metric(scenario="optml")-category.metric(scenario="crrnt"))
+    graphs['gm'] = make_stackedbar("gm($K)",category.metric(metric='gm',scenario="plan"),
+                                        category.metric(metric='gm',scenario="crrnt"),
+                                        category.metric(metric='gm',scenario="optml")-category.metric(metric='gm',scenario="crrnt"))
+    graphs['saleswk'] = make_wklybar("Sales($M)",30,28,5)
+    graphs['gmwk'] = make_wklybar('GM($M)',13,12,2.5)
     
-    #test = mysku.get_metric('gm','crrnt')
-    return render_template("main/dashboard.html",message='hello world!', clusters=clusters)
+    #test = mysku.metric('gm','crrnt')
+    return render_template("main/dashboard.html",message='hello world!',graphs=graphs,clusters=clusters,category=category,randint=randint)
 
 @main.route('/analysis', methods=["POST","GET"])
 def analysis():

@@ -119,7 +119,7 @@ class Store(db.Model):
     def __repr__(self):
         return str(self.store_num)
 
-    def get_metric(self,metric,crrnt_or_optml):
+    def metric(self,metric,crrnt_or_optml):
         pass
 
     def __init__(self,store_num,street,city,state,zipcd,warehouse,lat=None,lng=None,company_id=None):
@@ -303,7 +303,7 @@ class Cluster(db.Model):
     def __repr__(self):
         return "Cluster: {}".format(self.name)
 
-    def get_metric(self,metric="sales",scenario="crrnt"):
+    def metric(self,metric="sales",scenario="crrnt"):
         ### Metric options: 'gm','sellthru','units','sales'###
         assert isinstance(scenario,str) and isinstance(metric,str), TypeError('Scenario & metric args must be type string')
         
@@ -324,13 +324,23 @@ class Cluster(db.Model):
         elif metric == 'sales':
             for sku in self.skus.all():
                 total+=sku.get_sales(scenario)
+        else:
+            raise ValueError('Invalid scenario or metric specified')
         
         return total
 
     def chg_plan(self,metric="sales"):
         ### Current metrics relative to plan###
-        change = (self.get_metric(metric) - self.get_metric(metric,"plan"))/self.get_metric(metric,"plan")
+        if self.metric(metric,"plan"):
+            change = (self.metric(metric) - self.metric(metric,"plan"))/self.metric(metric,"plan")
+        else:
+            raise ZeroDivisionError('No {} exists for this cluster'.format(metric))
         return change
+
+    def impact(self,metric="sales"):
+        ### impact of optml scenario vs current Scenario###
+        return (self.metric(metric,'optml') - self.metric(metric))
+
         
 class Category(db.Model):
     __tablename__ = 'categories'
@@ -343,6 +353,38 @@ class Category(db.Model):
 
     def __repr__(self):
         return "Category: {}".format(self.name)
+
+    def metric(self,metric="sales",scenario="crrnt"):
+        ### Metric options: 'gm','sellthru','units','sales'###
+        assert isinstance(scenario,str) and isinstance(metric,str), TypeError('Scenario & metric args must be type string')
+        
+        total = 0
+        
+        # Need to calc sellthru as weighted avg eventually
+        if metric == "sellthru":
+            count = 0
+            for cluster in self.clusters.all():
+                val = cluster.metric(metric,scenario)+1
+                if val:
+                    total+=cluster.metric(metric,scenario)
+                    count+=1
+            total/=count
+        elif metric in ("gm","sales"):
+            total = 0
+            for cluster in self.clusters.all():
+                total+=cluster.metric(metric,scenario)
+        else:
+            raise ValueError('Invalid scenario or metric specified')        
+        return total
+
+    def chg_plan(self,metric="sales"):
+        ### Current metrics relative to plan###
+        change = (self.metric(metric) - self.metric(metric,"plan"))/self.metric(metric,"plan")
+        return change
+
+    def impact(self,metric="sales"):
+        ### impact of optml scenario vs current Scenario###
+        return (self.metric(metric,'optml') - self.metric(metric))
 
 class Channel(db.Model):
     __tablename__ = 'channels'
