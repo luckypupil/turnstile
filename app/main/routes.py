@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, flash, url_for, make_response
 from . import main
-from ..models import SKU, Category, Store, Cluster
+from ..models import SKU, Category, Store, Cluster, Channel
 from app import db
 from .forms import sku_list_search, sku_store_search
 from pprint import pprint as pp
@@ -60,11 +60,15 @@ def stores():
 
 @main.route('/disposition')
 def dispositions():
-	return render_template("main/dispositions.html",message='hello world!')
+    listskus = SKU.query.filter(SKU.lqdt_rec == True)
+    watchskus = SKU.query.filter(SKU.lqdt_watch == True)
+    return render_template("main/dispositions.html",listskus=listskus,watchskus=watchskus)
 
-@main.route('/disposition/profile')
-def dispo_profile():
-	return render_template("main/dispo_profile.html",message='hello world!')
+@main.route('/disposition/profile/<int:id>')
+def dispo_profile(id=21):
+    sku = SKU.query.get_or_404(id)
+    
+    return render_template("main/dispo_profile.html",sku=sku)
 
 
 

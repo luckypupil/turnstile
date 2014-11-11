@@ -230,6 +230,9 @@ class SKU(db.Model):
         units = db.session.query(func.sum(Store_Distribution.units)).filter(Store_Distribution.sku_id == self.id).first()
         return units[0]
 
+    def avg_price(self):
+        return self.org_price*.95
+
     def get_sales(self,scenario="crrnt"):
         assert isinstance(scenario,str), TypeError('Scenario arg must be a string')
 
@@ -270,14 +273,17 @@ class SKU(db.Model):
 
         return totsellthru[0] / db.session.query(func.count(Store_Distribution.optml_sellthru_fc)).filter(Store_Distribution.sku_id == self.id).first()[0]
 
+
+    def channel(self):
+        return Channel.query.get(self.lqdt_channel_id).name
+
     def lqdt_store(self):
         pass
     
-    def avg_price(self):
-        pass
+    
 
-    def gm(self,price):
-        return ((price - self.unit_cost)/self.unit_cost)
+    def lqdt_gm(self):
+        return ((self.lqdt_price - self.unit_cost)/self.unit_cost)
 
     # def get_clust_met(skus):
     #     units = 0

@@ -14,116 +14,32 @@
 					<td>Alt. Price</td>
 					<td>List</td>
 				</th>
-				{#{% for cluster in clusters %}#}
+				{% for sku in listskus %}
 				<tr>
 					<td>{{ 1 }}</td>
-					<td>{{ '101A' }}</td>
-					<td>{{ 'Amazon' }}</td>
-					<td>{{ '{0:0.1f}%'.format(63) }}</td>
-					<td>{{ 250 }}</td>
-					<td>{{ '$%d' | format(60) }}</td>
-					<td>{{ '$%d' | format(55) }}</td>
+					<td><a href="{{ url_for('.dispo_profile',id=sku.id)}}"> {{ sku.sku_num }} </a></td>
+					<td>{{ sku.channel() }}</td>
+					<td>{{ '{0:0.1f}%'.format(sku.get_sellthru()) }}</td>
+					<td>{{ sku.get_units() }}</td>
+					<td>{{ '$%d' | format(sku.avg_price()/100) }}</td>
+					<td>{{ '$%d' | format(sku.lqdt_price/100) }}</td>
 					<td><input type="text" class="form-control dispoP" placeholder="{{ '$%d' | format(60) }}"></td>
 					<td><input type="checkbox"></td>
 				</tr>
-				<tr>
-					<td>{{ 1 }}</td>
-					<td>{{ '101A' }}</td>
-					<td>{{ 'Amazon' }}</td>
-					<td>{{ '{0:0.1f}%'.format(63) }}</td>
-					<td>{{ 250 }}</td>
-					<td>{{ '$%d' | format(60) }}</td>
-					<td>{{ '$%d' | format(55) }}</td>
-					<td><input type="text" class="form-control dispoP" placeholder="{{ '$%d' | format(60) }}"></td>
-					<td><input type="checkbox"></td>
-				</tr>
-				<tr>
-					<td>{{ 1 }}</td>
-					<td>{{ '101A' }}</td>
-					<td>{{ 'Amazon' }}</td>
-					<td>{{ '{0:0.1f}%'.format(63) }}</td>
-					<td>{{ 250 }}</td>
-					<td>{{ '$%d' | format(60) }}</td>
-					<td>{{ '$%d' | format(55) }}</td>
-					<td><input type="text" class="form-control dispoP" placeholder="{{ '$%d' | format(60) }}"></td>
-					<td><input type="checkbox"></td>
-				</tr>
-				<tr>
-					<td>{{ 1 }}</td>
-					<td>{{ '101A' }}</td>
-					<td>{{ 'Amazon' }}</td>
-					<td>{{ '{0:0.1f}%'.format(63) }}</td>
-					<td>{{ 250 }}</td>
-					<td>{{ '$%d' | format(60) }}</td>
-					<td>{{ '$%d' | format(55) }}</td>
-					<td><input type="text" class="form-control dispoP" placeholder="{{ '$%d' | format(60) }}"></td>
-					<td><input type="checkbox"></td>
-				</tr>
-				<tr>
-					<td>{{ 1 }}</td>
-					<td>{{ '101A' }}</td>
-					<td>{{ 'Amazon' }}</td>
-					<td>{{ '{0:0.1f}%'.format(63) }}</td>
-					<td>{{ 250 }}</td>
-					<td>{{ '$%d' | format(60) }}</td>
-					<td>{{ '$%d' | format(55) }}</td>
-					<td><input type="text" class="form-control dispoP" placeholder="{{ '$%d' | format(60) }}"></td>
-					<td><input type="checkbox"></td>
-				</tr>
-				<tr>
-					<td>{{ 1 }}</td>
-					<td>{{ '101A' }}</td>
-					<td>{{ 'Amazon' }}</td>
-					<td>{{ '{0:0.1f}%'.format(63) }}</td>
-					<td>{{ 250 }}</td>
-					<td>{{ '$%d' | format(60) }}</td>
-					<td>{{ '$%d' | format(55) }}</td>
-					<td><input type="text" class="form-control dispoP" placeholder="{{ '$%d' | format(60) }}"></td>
-					<td><input type="checkbox"></td>
-				</tr>
-				<tr>
-					<td>{{ 1 }}</td>
-					<td>{{ '101A' }}</td>
-					<td>{{ 'Amazon' }}</td>
-					<td>{{ '{0:0.1f}%'.format(63) }}</td>
-					<td>{{ 250 }}</td>
-					<td>{{ '$%d' | format(60) }}</td>
-					<td>{{ '$%d' | format(55) }}</td>
-					<td><input type="text" class="form-control dispoP" placeholder="{{ '$%d' | format(60) }}"></td>
-					<td><input type="checkbox"></td>
-				</tr>
-				<tr>
-					<td>{{ 1 }}</td>
-					<td>{{ '101A' }}</td>
-					<td>{{ 'Amazon' }}</td>
-					<td>{{ '{0:0.1f}%'.format(63) }}</td>
-					<td>{{ 250 }}</td>
-					<td>{{ '$%d' | format(60) }}</td>
-					<td>{{ '$%d' | format(55) }}</td>
-					<td><input type="text" class="form-control dispoP" placeholder="{{ '$%d' | format(60) }}"></td>
-					<td><input type="checkbox"></td>
-				</tr>
-				<tr>
-					<td>{{ 1 }}</td>
-					<td>{{ '101A' }}</td>
-					<td>{{ 'Amazon' }}</td>
-					<td>{{ '{0:0.1f}%'.format(63) }}</td>
-					<td>{{ 250 }}</td>
-					<td>{{ '$%d' | format(60) }}</td>
-					<td>{{ '$%d' | format(55) }}</td>
-					<td><input type="text" class="form-control dispoP" placeholder="{{ '$%d' | format(60) }}"></td>
-					<td><input type="checkbox"></td>
-				</tr>
-				{#{% endfor %}#}
+				{% endfor %}
 			</table>
 	</div>
 </div>
 <div class="col-md-2 left-buffer">
 	<div class="row top-buffer"><center>Watchlist</center></div>
-		<div class="row top-buffer"><img src="{{ url_for('static',filename='img/coat1.jpeg') }}"> Caption</div>
-	<div class="row top-buffer">
-		<div class="row top-buffer"><img src="{{ url_for('static',filename='img/coat2.jpeg') }}"> Caption</div>
-	</div>
+		{#{% for sku in watchskus %}#}
+		<div class="row top-buffer">
+			<img src="{{ url_for('static',filename='img/coat1.jpeg') }}">
+		</div>
+		<div class="row top-buffer">
+			<div class="row top-buffer"><img src="{{ url_for('static',filename='img/coat2.jpeg') }}"> Caption</div>
+		</div>
+		{#{% endfor %}#}
 </div>
 
 {% endblock %}
