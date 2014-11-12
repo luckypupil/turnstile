@@ -10,7 +10,7 @@ Models = {
 		'segments': ['name'],
 		'channels': ['name'],
 		'skus': ['sku_num','prod_nm','brand','org_price','launch_dt','phase_out',
-				'unit_cost','cluster_nm','lqdt_watch','lqdt_rec','on_market','lqdt_price'],
+				'unit_cost','cluster_nm','lqdt_watch','lqdt_rec','on_market','lqdt_price','units_to_list'],
 		'stores': ['store_num','street','city','state',	'zipcd','warehouse'],
 		'clusters':['name', 'category_nm'],
 		'user_roles':['name'],
@@ -20,7 +20,7 @@ Models = {
 		} 
 
 
-def popdb(*tables):	
+def popdb(*tables):
      
     conn = psycopg2.connect("dbname=devturnstile user=blakeadams")
     cur = conn.cursor()
@@ -73,6 +73,7 @@ def add_cluster_id():
 	for sku in skus:
 		if Cluster.query.filter(Cluster.name == sku.cluster_nm).first():
 			sku.cluster_id = Cluster.query.filter(Cluster.name == sku.cluster_nm).first().id
+			sku.lqdt_channel_id = randint(1,5)
 			new_skus.append(sku)
 	db.session.add_all(new_skus)
 	db.session.commit()
@@ -92,7 +93,8 @@ def add_category_id():
 
 
 if __name__ == '__main__':
-	popdb('categories','companies','segments','channels','skus','stores','clusters','user_roles','users')
-	store_distro()
-	add_cluster_id()
+	# db.create_all()
+	# popdb('categories','companies','segments','channels','skus','stores','clusters','user_roles','users')
+	# store_distro()
+	# add_cluster_id()
 	add_category_id()

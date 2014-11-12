@@ -19,8 +19,8 @@ def dashboard():
         category = Category.query.get(cat_id) # Need to populate data for cats for this to work
         clusters = get_clusters(cat_id)
     else:
-        category = Category.query.get(5)
-        clusters = get_clusters(5)
+        category = Category.query.first()
+        clusters = get_clusters(category.id)
     
     graphs = category.graphs()
 
@@ -28,9 +28,15 @@ def dashboard():
 
 @main.route('/analysis', methods=["POST","GET"])
 def analysis():
-    category = Category.query.get(7)
-    clusters = category.clusters.all()
-    clusters = list(filter(lambda x: x.metric() > 0, clusters))
+    if form.validate_on_submit():
+        cat_id = form.categories.data
+        print (cat_id)
+        category = Category.query.get(cat_id) # Need to populate data for cats for this to work
+        clusters = get_clusters(cat_id)
+    else:
+        category = Category.query.first()
+        clusters = get_clusters(category.id)
+
     graphs = category.graphs()
 
     skus = db.session.query(SKU).all()
