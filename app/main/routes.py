@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, flash, url_for, make_respo
 from . import main
 from ..models import SKU, Category, Store, Cluster, Channel
 from app import db
-from .forms import sku_list_search, sku_store_search
+from .forms import sku_list_search, sku_store_search, cat_select
 from pprint import pprint as pp
 from .helper import make_stackedbar, make_wklybar
 from random import randint
@@ -11,19 +11,16 @@ category = Category.query.get(7)
 clusters = category.clusters.all()
 clusters = list(filter(lambda x: x.metric() > 0, clusters))
 
-graphs = {}
-graphs['sales'] = make_stackedbar("Sales($K)",category.metric(scenario="plan"),
-                                        category.metric(scenario="crrnt"),
-                                        category.metric(scenario="optml")-category.metric(scenario="crrnt"))
-graphs['gm'] = make_stackedbar("GM($K)",category.metric(metric='gm',scenario="plan"),
-                                        category.metric(metric='gm',scenario="crrnt"),
-                                        category.metric(metric='gm',scenario="optml")-category.metric(metric='gm',scenario="crrnt"))
-graphs['saleswk'] = make_wklybar("Sales($M)",30,28,5)
-graphs['gmwk'] = make_wklybar('GM($M)',13,12,2.5)
-
-@main.route('/')
+@main.route('/', methods=["POST","GET"])
 def dashboard():
-    return render_template("main/dashboard.html",message='hello world!',graphs=graphs,clusters=clusters,category=category,randint=randint)
+    form = cat_select()
+    if form.validate_on_submit():
+        cat_id, sku_num = form.category.data, form.sku.data
+        if sku_num:
+            skus = db.session.query(SKU).filter(SKU.sku_num == sku_num).all()
+        else:
+           skus = (skus if not cat_id else db.session.query(SKU).filter(SKU.category == cat_id).all())
+    return render_template("main/dashboard.html",message='hello world!',graphs=graphs,clusters=clusters,category=category,randint=randint, form=form)
 
 @main.route('/analysis', methods=["POST","GET"])
 def analysis():

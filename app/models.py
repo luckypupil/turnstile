@@ -6,6 +6,7 @@ from app import db
 from .main import _skus, _stores, _sku_clusters, _store_distro, _categories
 import requests
 from sqlalchemy import func
+from .main.graphs import make_stackedbar, make_wklybar
 
 class User_Role(db.Model):
     __tablename__ = 'user_roles'
@@ -391,6 +392,19 @@ class Category(db.Model):
     def impact(self,metric="sales"):
         ### impact of optml scenario vs current Scenario###
         return (self.metric(metric,'optml') - self.metric(metric))
+
+    def graphs(self):
+        graphs = {}
+        graphs['sales'] = make_stackedbar("Sales($K)",self.metric(scenario="plan"),
+                                                self.metric(scenario="crrnt"),
+                                                self.metric(scenario="optml")-self.metric(scenario="crrnt"))
+        graphs['gm'] = make_stackedbar("GM($K)",self.metric(metric='gm',scenario="plan"),
+                                                self.metric(metric='gm',scenario="crrnt"),
+                                                self.metric(metric='gm',scenario="optml")-self.metric(metric='gm',scenario="crrnt"))
+        graphs['saleswk'] = make_wklybar("Sales($M)",30,28,5)
+        graphs['gmwk'] = make_wklybar('GM($M)',13,12,2.5)
+
+        return graphs
 
 class Channel(db.Model):
     __tablename__ = 'channels'

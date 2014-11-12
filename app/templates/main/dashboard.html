@@ -2,12 +2,29 @@
 {% block pagelabel %}My Dashboard{% endblock %}
 {% block page_content %}
 	<div class="row">
-		<a href="#actionlist"><h4><span class="label label-primary">Actions
-			<span class="badge" style="height:75%;">{{ clusters|length }}</span>
-		</span></a>
-		<span class="label label-success left-buffer">+{{ '${0:0.1f}M'.format(category.impact()/100000) }} Sales</span>
-		<span class="label label-success left-buffer">+{{ '${0:0.1f}M'.format(category.impact('gm')/100000) }} GM</span>
-		<span class="label label-success left-buffer">+{{ '{0:0.1f}%'.format(category.impact('sellthru')/100000) }} Sell-through</span></h4>
+		<div class="col-md-5">
+			<form role="form" method="POST" name="dashboard" action="{{ url_for('.dashboard') }}">
+	            	{{ form.csrf_token }}
+				<div class="col-md-6">
+		            <div class="form-group">
+		    			{{ form.categories(class="form-control",placeholder="category") }}
+		    		</div>
+		    	</div>
+		    	<div class="col-md-4">
+		    		<div class="form-group">
+		    			<button type="submit" class="btn btn-default">Submit</button>
+		    		</div>
+		    	</div>
+	        </form>
+		</div>
+		<div class="col-md-7">
+			<a href="#actionlist"><h4><span class="label label-primary">Actions
+				<span class="badge" style="height:75%;">{{ clusters|length }}</span>
+			</span></a>
+			<span class="label label-success left-buffer">+{{ '${0:0.1f}M'.format(category.impact()/100000) }} Sales</span>
+			<span class="label label-success left-buffer">+{{ '${0:0.1f}M'.format(category.impact('gm')/100000) }} GM</span>
+			<span class="label label-success left-buffer">+{{ '{0:0.1f}%'.format(category.impact('sellthru')/100000) }} Sell-through</span></h4>
+		</div>
 	</div>
 	<div class="row top-buffer">
 		<div class="col-md-12">

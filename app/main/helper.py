@@ -11,11 +11,11 @@ from pygal.style import LightenStyle
 import random
 from sqlalchemy import func
 
-# def get_categories():
-#     cat_list = [(0,' All')]
-#     for cat in db.session.query(Category).all():
-# 	    cat_list.append((cat.id,cat.name))
-#     return sorted(cat_list,key=itemgetter(1))
+def get_categories():
+    cat_list = [(0,' All')]
+    for cat in db.session.query(Category).all():
+	    cat_list.append((cat.id,cat.name))
+    return sorted(cat_list,key=itemgetter(1))
 
 states = {
         'AK': 'Alaska',
@@ -95,7 +95,6 @@ def get_clust_met(skus):
     units = 0
     for sku in skus:
         units+=get_sku_units(sku.id)
-    
     return units
 
 
