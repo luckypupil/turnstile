@@ -46,9 +46,9 @@ def analysis():
     return render_template("main/analysis.html",skus=skus, form=form, formanal=formanal,results=len(skus),graphs=graphs)
 
 
-@main.route('/analysis', methods=["POST", "GET"])
+@main.route('/promohistory', methods=["POST", "GET"])
 def history():
-    return('hellow world!')
+    return render_template("main/history.html")
 
 
 @main.route('/stores',methods=["POST","GET"])
