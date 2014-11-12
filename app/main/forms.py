@@ -6,7 +6,7 @@ from .helper import get_states, get_categories, get_clusters_select
 
 
 class cluster_anal(Form):
-    cluster = SelectField('Cluster', choices=get_clusters_select(7),coerce=int)
+    cluster = SelectField('Cluster', choices=get_clusters_select(),coerce=int)
     test_price = StringField('Price')
 
 class sku_store_search(Form):

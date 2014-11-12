@@ -16,10 +16,10 @@ def get_categories():
         return sorted(cat_list,key=itemgetter(1))
     except:
         pass
-        
-def get_clusters_select(cat_id):
+
+def get_clusters_select(cat_id=0):
     ### Gets list of cluster for form SelectField####
-    cluster_list = [(0,' All')]
+    if not cat_id: cluster_list = [(0,' All')]
     
     try:
         category = Category.query.get(cat_id)
@@ -27,7 +27,7 @@ def get_clusters_select(cat_id):
             cluster_list.append((cluster.id,cluster.name))
         return sorted(cluster_list,key=itemgetter(1))
     except:
-        pass
+        return cluster_list
 
 def get_clusters(cat_id):
     clusters = Category.query.get(cat_id).clusters.all()

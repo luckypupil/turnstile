@@ -28,26 +28,27 @@ def dashboard():
 
 @main.route('/analysis', methods=["POST","GET"])
 def analysis():
+    
+    form = cat_select()
+
     if form.validate_on_submit():
         cat_id = form.categories.data
-        print (cat_id)
         category = Category.query.get(cat_id) # Need to populate data for cats for this to work
         clusters = get_clusters(cat_id)
+    
     else:
         category = Category.query.first()
         clusters = get_clusters(category.id)
 
-    graphs = category.graphs()
-
     skus = db.session.query(SKU).all()
-    form = cat_select()
+    
     formanal = cluster_anal()
     if form.validate_on_submit():
-        cat_id, sku_num = form.category.data, form.sku.data
-        if sku_num:
-            skus = db.session.query(SKU).filter(SKU.sku_num == sku_num).all()
-        else:
-           skus = (skus if not cat_id else db.session.query(SKU).filter(SKU.category == cat_id).all())
+        cat_id = form.categories.data
+        if cat_id:
+            category = Category.query.get(cat_id)
+
+    graphs = category.graphs()
 
     return render_template("main/analysis.html",skus=skus, form=form, formanal=formanal,results=len(skus),graphs=graphs)
 
