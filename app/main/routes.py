@@ -16,12 +16,12 @@ def dashboard():
     if form.validate_on_submit():
         cat_id = form.categories.data
         print (cat_id)
-        # category = Category.query.get(cat_id) # Need to populate data for cats for this to work
-        category = Category.query.get(7)
+        category = Category.query.get(cat_id) # Need to populate data for cats for this to work
+        clusters = get_clusters(cat_id)
     else:
-        category = Category.query.get(7)
+        category = Category.query.get(5)
+        clusters = get_clusters(5)
     
-    clusters = get_clusters(7)
     graphs = category.graphs()
 
     return render_template("main/dashboard.html",message='hello world!',graphs=graphs,clusters=clusters,category=category,randint=randint, form=form)

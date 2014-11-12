@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import psycopg2
-from app.models import SKU, Store, Store_Distribution
+from app.models import SKU, Store, Store_Distribution, Cluster, Category
 from app import db
 from random import randint
 
@@ -10,9 +10,9 @@ Models = {
 		'segments': ['name'],
 		'channels': ['name'],
 		'skus': ['sku_num','prod_nm','brand','org_price','launch_dt','phase_out',
-				'unit_cost','lqdt_watch','lqdt_rec','on_market','lqdt_price'],
+				'unit_cost','cluster_nm','lqdt_watch','lqdt_rec','on_market','lqdt_price'],
 		'stores': ['store_num','street','city','state',	'zipcd','warehouse'],
-		'clusters':['name'],
+		'clusters':['name', 'category_nm'],
 		'user_roles':['name'],
 		'users':['first','last','email','password','phone'],
 		'store_distribution':['sku_id','store_id','receipt_dt','units','crrnt_price','optml_price','plan_gm_fc','crrnt_gm_fc','optml_gm_fc','plan_sales_fc',
@@ -42,6 +42,7 @@ def popdb(*tables):
 def store_distro():
 	skus = SKU.query.all()
 	stores = Store.query.all()
+	new_sku_stores = []
 	for sku in skus:
 		for store in stores:
 			units = randint(50,225)
@@ -60,11 +61,38 @@ def store_distro():
 				plan_gm_fc,crrnt_gm_fc,optml_gm_fc,plan_sales_fc,crrnt_sales_fc,optml_sales_fc,
 				plan_sellthru_fc,crrnt_sellthru_fc,optml_sellthru_fc)    
 			sku_store.sku_id, sku_store.store_id = sku.id, store.id
-			# print (sku_store)
-			db.session.add(sku_store)
-			db.session.commit()
+			new_sku_stores.append(sku_store)
+			
+	db.session.add_all(new_sku_stores)
+	db.session.commit()
+
+def add_cluster_id():
+	### Adds cluster id to the sku table using the cluster_nm field ###
+	skus = SKU.query.all()
+	new_skus = []
+	for sku in skus:
+		if Cluster.query.filter(Cluster.name == sku.cluster_nm).first():
+			sku.cluster_id = Cluster.query.filter(Cluster.name == sku.cluster_nm).first().id
+			new_skus.append(sku)
+	db.session.add_all(new_skus)
+	db.session.commit()
+
+def add_category_id():
+	### Adds categiry id to the cluster table using the categiry_nm field ###
+	clusters = Cluster.query.all()
+	new_clusters = []
+	for cluster in clusters:
+		if Category.query.filter(Category.name == cluster.category_nm).first():
+			cluster.category_id = Category.query.filter(Category.name == cluster.category_nm).first().id
+			new_clusters.append(cluster)
+	db.session.add_all(new_clusters)
+	db.session.commit()
+
+
 
 
 if __name__ == '__main__':
-	#popdb('categories','companies','segments','channels','skus','stores','clusters','user_roles','users')
+	popdb('categories','companies','segments','channels','skus','stores','clusters','user_roles','users')
 	store_distro()
+	add_cluster_id()
+	add_category_id()

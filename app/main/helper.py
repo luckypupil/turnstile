@@ -10,17 +10,24 @@ from sqlalchemy import func
 
 def get_categories():
     cat_list = [(0,' All')]
-    for cat in db.session.query(Category).all():
-	    cat_list.append((cat.id,cat.name))
-    return sorted(cat_list,key=itemgetter(1))
-
+    try:
+        for cat in db.session.query(Category).all():
+    	    cat_list.append((cat.id,cat.name))
+        return sorted(cat_list,key=itemgetter(1))
+    except:
+        pass
+        
 def get_clusters_select(cat_id):
     ### Gets list of cluster for form SelectField####
     cluster_list = [(0,' All')]
-    category = Category.query.get(cat_id)
-    for cluster in category.clusters.all():
-        cluster_list.append((cluster.id,cluster.name))
-    return sorted(cluster_list,key=itemgetter(1))
+    
+    try:
+        category = Category.query.get(cat_id)
+        for cluster in category.clusters.all():
+            cluster_list.append((cluster.id,cluster.name))
+        return sorted(cluster_list,key=itemgetter(1))
+    except:
+        pass
 
 def get_clusters(cat_id):
     clusters = Category.query.get(cat_id).clusters.all()

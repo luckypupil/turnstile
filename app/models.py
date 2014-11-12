@@ -6,6 +6,8 @@ from app import db
 from .main import _skus, _stores, _sku_clusters, _store_distro, _categories
 import requests
 from sqlalchemy import func
+from sqlalchemy.dialects.postgresql import ARRAY
+
 from .main.graphs import make_stackedbar, make_wklybar
 
 class User_Role(db.Model):
@@ -191,6 +193,8 @@ class SKU(db.Model):
     launch_dt = db.Column(db.Date)
     phase_out = db.Column(db.Date)
     unit_cost = db.Column(db.Integer)
+    wkly_sales = db.Column(ARRAY(db.Integer))
+    wkly_gm = db.Column(ARRAY(db.Integer))
     #Liquidation Considerations#
     lqdt_watch = db.Column(db.Boolean, default=False)
     lqdt_rec = db.Column(db.Boolean, default=False)
@@ -198,6 +202,7 @@ class SKU(db.Model):
     lqdt_price = db.Column(db.Integer)
     units_to_list = db.Column(db.Integer, default=0)
     lqdt_channel_id = db.Column(db.Integer, db.ForeignKey('channels.id'))
+    cluster_nm = db.Column(db.String(32))
     cluster_id = db.Column(db.Integer, db.ForeignKey('clusters.id'))
     
     #shipping dimensions
@@ -300,6 +305,7 @@ class Cluster(db.Model):
     __tablename__ = 'clusters'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True) #nullable
+    category_nm = db.Column(db.String(32))
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
     skus = db.relationship('SKU', lazy='dynamic')
 
