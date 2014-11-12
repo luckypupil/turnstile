@@ -9,7 +9,7 @@ from random import randint
 
 category = Category.query.get(7)
 clusters = category.clusters.all()
-clusters = filter(lambda x: x.metric() > 0, clusters)
+clusters = list(filter(lambda x: x.metric() > 0, clusters))
 
 graphs = {}
 graphs['sales'] = make_stackedbar("Sales($K)",category.metric(scenario="plan"),

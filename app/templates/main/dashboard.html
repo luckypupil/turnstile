@@ -2,12 +2,12 @@
 {% block pagelabel %}My Dashboard{% endblock %}
 {% block page_content %}
 	<div class="row">
-		<span class="label label-primary">Actions
-			<span class="badge" style="height:75%;">5</span>
-		:</span>
-		<span class="label label-success left-buffer">+20M Sales</span>
-		<span class="label label-success left-buffer">+5M GM$</span>
-		<span class="label label-success left-buffer">8.5%+ Sellthrough</span>
+		<a href="#actionlist"><h4><span class="label label-primary">Actions
+			<span class="badge" style="height:75%;">{{ clusters|length }}</span>
+		</span></a>
+		<span class="label label-success left-buffer">+{{ '${0:0.1f}M'.format(category.impact()/100000) }} Sales</span>
+		<span class="label label-success left-buffer">+{{ '${0:0.1f}M'.format(category.impact('gm')/100000) }} GM</span>
+		<span class="label label-success left-buffer">+{{ '{0:0.1f}%'.format(category.impact('sellthru')/100000) }} Sell-through</span></h4>
 	</div>
 	<div class="row top-buffer">
 		<div class="col-md-12">
@@ -27,10 +27,19 @@
 	</div>
 	<div class="row">
 		<div class="row table-responsive top-buffer">
-			<table class="table table-striped">
+			<table id="actionlist" class="table table-striped">
 				{% include "snippets/maintblhead.html" %}
 				{% for cluster in clusters %}
-				{% include "snippets/maintblbody.html" %}
+					<tr>
+						<td>{{ loop.index }}</td>
+						<td>{{ cluster.name }}</td>
+						<td>{{ '${0:0.2f}'.format(cluster.metric()/100) }}</td>
+						<td>{{ '{0:0.1f}%'.format(cluster.chg_plan()*100) }}</td>
+						<td>{{ '({0:0.1f}%)'.format(randint(0,40)) }}</td>
+						<td>{{ '${0:0.2f}'.format(cluster.impact()/100) }}</td>
+						<td>{{ '${0:0.2f}'.format(cluster.impact('gm')/100) }}</td>
+						<td>{{ '{0:0.1f}%'.format(cluster.impact('sellthru')) }}</td>
+					</tr>
 				{% endfor %}
 			</table>
 		</div>
