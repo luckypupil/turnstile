@@ -18,15 +18,24 @@
 	        </form>
 		</div>
 		<div class="col-md-8">
-			<h4><a href="#actionlist"><span class="label label-primary">Actions
-				<span class="badge" style="height:75%;">{{ clusters|length }}</span>
-			</span></a>
-			<a href="{{ url_for('.dispositions') }}"><span class="label label-danger left-buffer">Dispos
-				<span class="badge" style="height:75%;">3</span>
-			</span></a>
-			<span class="label label-success left-buffer">+{{ '${0:0.0f}M'.format(category.impact()/100000) }} Sales</span>
-			<span class="label label-success left-buffer">+{{ '${0:0.0f}M'.format(category.impact('gm')/100000) }} GM</span>
-			<span class="label label-success left-buffer">+{{ '{0:0.1f}%'.format(category.impact('sellthru')/100000) }} Sell-thrgh</span></h4>
+			<div class="col-md-5">
+				<h4><a href="#actionlist"><span class="label label-primary">Actions
+					<span class="badge" style="height:75%;">{{ clusters|length }}</span>
+				</span></a>
+				<a href="{{ url_for('.dispositions') }}"><span class="label label-danger left-buffer">Dispos
+					<span class="badge" style="height:75%;">3</span>
+				</span></a></h4>
+			</div>
+			<div class="col-md-7">
+				<div class="row">
+					<p class="no-margin"><center>Price recommendations impact:</center><hr class="no-margin"></p>
+				</div>
+				<div class="row"><center>
+					<h5 class="no-margin"><span class="label label-success">+{{ '${0:0.0f}M'.format(category.impact()/100000) }} Sales</span>
+					<span class="label label-success left-buffer">+{{ '${0:0.0f}M'.format(category.impact('gm')/100000) }} GM</span>
+					<span class="label label-success left-buffer">+{{ '{0:0.1f}%'.format(category.impact('sellthru')) }} Sell-thrgh</span></h5></center>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="row top-buffer">
@@ -61,6 +70,16 @@
 						<td>{{ '{0:0.1f}%'.format(cluster.impact('sellthru')) }}</td>
 					</tr>
 				{% endfor %}
+					<tr>
+						<td></td>
+						<td><h5>{{ 'Total' }}</h5></td>
+						<td><h5>{{ '${0:0.2f}'.format(category.metric()/100) }}</h5></td>
+						<td><h5>{{ '{0:0.1f}%'.format(category.chg_plan()*100) }}</h5></td>
+						<td><h5>{{ '({0:0.1f}%)'.format(randint(0,40)) }}</h5></td>
+						<td><h5>{{ '${0:0.2f}'.format(category.impact()/100) }}</h5></td>
+						<td><h5>{{ '${0:0.2f}'.format(category.impact('gm')/100) }}</h5></td>
+						<td><h5>{{ '{0:0.1f}%'.format(category.impact('sellthru')) }}</h5></td>
+					</tr>
 			</table>
 		</div>
     </div>

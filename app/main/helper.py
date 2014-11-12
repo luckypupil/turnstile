@@ -2,7 +2,7 @@
 from . import main
 from ..models import SKU, Category, Store_Distribution
 from app import db
-from operator import itemgetter
+from operator import itemgetter, methodcaller
 import numpy as np
 
 import random
@@ -14,12 +14,20 @@ def get_categories():
 	    cat_list.append((cat.id,cat.name))
     return sorted(cat_list,key=itemgetter(1))
 
-def get_clusters(cat_id):
+def get_clusters_select(cat_id):
+    ### Gets list of cluster for form SelectField####
     cluster_list = [(0,' All')]
     category = Category.query.get(cat_id)
     for cluster in category.clusters.all():
         cluster_list.append((cluster.id,cluster.name))
     return sorted(cluster_list,key=itemgetter(1))
+
+def get_clusters(cat_id):
+    clusters = Category.query.get(cat_id).clusters.all()
+    clusters = list(filter(lambda x: x.metric() > 0, clusters))
+    clusters = sorted(clusters, key=methodcaller('chg_plan'))
+    return clusters
+
 
 states = {
         'AK': 'Alaska',

@@ -25,8 +25,9 @@
 	border-bottom: .25rem dotted lightgray;
 }
 
-.no-bottom {
-	margin-bottom: 0px
+.no-margin {
+	margin-top: 0px;
+	margin-bottom: 0px;
 }
 .navbar-default {
 	background-color: #3366cc;

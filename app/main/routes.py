@@ -5,6 +5,7 @@ from app import db
 from .forms import cluster_anal, sku_store_search, cat_select
 from pprint import pprint as pp
 from random import randint
+from .helper import get_clusters
 
 
 @main.route('/', methods=["POST","GET"])
@@ -20,8 +21,7 @@ def dashboard():
     else:
         category = Category.query.get(7)
     
-    clusters = category.clusters.all()
-    clusters = list(filter(lambda x: x.metric() > 0, clusters))
+    clusters = get_clusters(7)
     graphs = category.graphs()
 
     return render_template("main/dashboard.html",message='hello world!',graphs=graphs,clusters=clusters,category=category,randint=randint, form=form)
