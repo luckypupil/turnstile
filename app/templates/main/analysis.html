@@ -12,30 +12,6 @@
 {% block pagelabel %}Sku List{% endblock %}
 {% block page_content %}
 <div class="col-md-12">
-	{#{% block searchfield %}
-	<div class="row">
-		<div class="col-md-6"><small>{{ 'Results: {}'.format(results) }}</small></div>
-		<form role="form" method="POST" name="analysis" action="{{ url_for('.analysis') }}">
-            	{{ form.csrf_token }}
-			<div class="col-md-2">
-	            <div class="form-group">
-	    			{{ form.category(class="form-control",placeholder="category") }}
-	    		</div>
-	    	</div>
-	    	<div class="col-md-2">
-	    		<div class="form-group">
-	    			{{ form.sku(class="form-control",placeholder="SKU") }}
-	    		</div>
-	    	</div>
-	    	<div class="col-md-2">
-	    		<div class="form-group">
-	    			<button type="submit" class="btn btn-default">Submit</button>
-	    		</div>
-	    	</div>
-          </form>
-	</div>
-	</div>
-	{% endblock %}#}
 	<div class="row">
 		<div class="col-md-4">
 			<div class="row">
@@ -47,6 +23,23 @@
 		</div>
 	
 		<div class="col-md-8">
+				<div class="row">
+					<div class="col-md-5">
+							<form role="form" method="POST" name="dashboard" action="{{ url_for('.dashboard') }}">
+					            	{{ form.csrf_token }}
+								<div class="col-md-6">
+						            <div class="form-group">
+						    			{{ form.categories(class="form-control",placeholder="category") }}
+						    		</div>
+						    	</div>
+						    	<div class="col-md-4">
+						    		<div class="form-group">
+						    			<button type="submit" class="btn btn-default">Submit</button>
+						    		</div>
+						    	</div>
+					        </form>
+					</div>
+				</div>
 			<div class="panel panel-default block-color">
   				<div class="panel-heading">
     				<h3 class="panel-title">Analytics</h3>
@@ -57,7 +50,7 @@
 					            	{{ form.csrf_token }}
 								<div class="col-md-2">
 						            <div class="form-group">
-						    			{{ form.cluster(class="form-control",placeholder="category") }}
+						    			{{ formanal.cluster(class="form-control",placeholder="category") }}
 						    		</div>
 						    	</div>
 						    	<div class="col-md-4">
@@ -65,7 +58,7 @@
 						    	</div>
 						    	<div class="col-md-2">
 						    		<div class="form-group">
-						    			{{ form.test_price(class="form-control",placeholder="price") }}
+						    			{{ formanal.test_price(class="form-control",placeholder="price") }}
 						    		</div>
 						    	</div>
 						    	<div class="col-md-2">

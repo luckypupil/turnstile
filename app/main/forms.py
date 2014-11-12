@@ -5,7 +5,7 @@ from wtforms.validators import Required, InputRequired, Length, Email
 from .helper import get_states, get_categories
 
 
-class sku_list_search(Form):
+class cluster_anal(Form):
     cluster = SelectField('Cluster', choices=[(1,'cluster1'),(2,'cluster2')],coerce=int)
     test_price = StringField('Price')
 

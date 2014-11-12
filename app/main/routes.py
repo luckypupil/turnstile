@@ -2,30 +2,41 @@ from flask import render_template, request, redirect, flash, url_for, make_respo
 from . import main
 from ..models import SKU, Category, Store, Cluster, Channel
 from app import db
-from .forms import sku_list_search, sku_store_search, cat_select
+from .forms import cluster_anal, sku_store_search, cat_select
 from pprint import pprint as pp
 from .helper import make_stackedbar, make_wklybar
 from random import randint
 
-category = Category.query.get(7)
-clusters = category.clusters.all()
-clusters = list(filter(lambda x: x.metric() > 0, clusters))
 
 @main.route('/', methods=["POST","GET"])
 def dashboard():
+
     form = cat_select()
+    
     if form.validate_on_submit():
-        cat_id, sku_num = form.category.data, form.sku.data
-        if sku_num:
-            skus = db.session.query(SKU).filter(SKU.sku_num == sku_num).all()
-        else:
-           skus = (skus if not cat_id else db.session.query(SKU).filter(SKU.category == cat_id).all())
+        cat_id = form.categories.data
+        print (cat_id)
+        # category = Category.query.get(cat_id) # Need to populate data for cats for this to work
+        category = Category.query.get(7)
+    else:
+        category = Category.query.get(7)
+    
+    clusters = category.clusters.all()
+    clusters = list(filter(lambda x: x.metric() > 0, clusters))
+    graphs = category.graphs()
+
     return render_template("main/dashboard.html",message='hello world!',graphs=graphs,clusters=clusters,category=category,randint=randint, form=form)
 
 @main.route('/analysis', methods=["POST","GET"])
 def analysis():
+    category = Category.query.get(7)
+    clusters = category.clusters.all()
+    clusters = list(filter(lambda x: x.metric() > 0, clusters))
+    graphs = category.graphs()
+
     skus = db.session.query(SKU).all()
-    form = sku_list_search()
+    form = cat_select()
+    formanal = cluster_anal()
     if form.validate_on_submit():
         cat_id, sku_num = form.category.data, form.sku.data
         if sku_num:
@@ -33,7 +44,7 @@ def analysis():
         else:
            skus = (skus if not cat_id else db.session.query(SKU).filter(SKU.category == cat_id).all())
 
-    return render_template("main/analysis.html",skus=skus, form=form,results=len(skus),graphs=graphs)
+    return render_template("main/analysis.html",skus=skus, form=form, formanal=formanal,results=len(skus),graphs=graphs)
 
 
 @main.route('/analysis', methods=["POST", "GET"])
