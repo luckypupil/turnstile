@@ -12,6 +12,7 @@ class cluster_anal(Form):
 class sku_store_search(Form):
     state = SelectField('State', choices=get_states())
     store_num = StringField('Store#')
-
+    categories = SelectField('Categories', choices=get_categories(),coerce=int)
+    
 class cat_select(Form):
     categories = SelectField('Categories', choices=get_categories(),coerce=int)
