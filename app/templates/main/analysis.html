@@ -9,11 +9,26 @@
 	  	});
 	</script>
 {% endblock %}
-{% block pagelabel %}Sku List{% endblock %}
+{% block pagelabel %}Cluster Analysis{% endblock %}
 {% block page_content %}
 <div class="col-md-12">
 	<div class="row">
 		<div class="col-md-4">
+			<div class="row">
+					<form role="form" method="POST" name="dashboard" action="{{ url_for('.dashboard') }}">
+			            	{{ form.csrf_token }}
+						<div class="col-md-8">
+				            <div class="form-group">
+				    			{{ form.categories(class="form-control",placeholder="category") }}
+				    		</div>
+				    	</div>
+				    	<div class="col-md-4">
+				    		<div class="form-group">
+				    			<button type="submit" class="btn btn-default">Submit</button>
+				    		</div>
+				    	</div>
+			        </form>
+				</div>
 			<div class="row">
 				<div class="col-md-12">{{graphs.sales|safe}}</div>
 			</div>
@@ -21,34 +36,18 @@
 				<div class="col-md-12">{{graphs.gm|safe}}</div>
 			</div>
 		</div>
-	
 		<div class="col-md-8">
-				<div class="row">
-					<div class="col-md-5">
-							<form role="form" method="POST" name="dashboard" action="{{ url_for('.dashboard') }}">
-					            	{{ form.csrf_token }}
-								<div class="col-md-6">
-						            <div class="form-group">
-						    			{{ form.categories(class="form-control",placeholder="category") }}
-						    		</div>
-						    	</div>
-						    	<div class="col-md-4">
-						    		<div class="form-group">
-						    			<button type="submit" class="btn btn-default">Submit</button>
-						    		</div>
-						    	</div>
-					        </form>
-					</div>
-				</div>
 			<div class="panel panel-default block-color">
   				<div class="panel-heading">
     				<h3 class="panel-title">Analytics</h3>
   				</div>
   			<div class="panel-body">
-						<div class="row">
-							<form role="form" method="POST" name="stores" action="{{ url_for('.analysis') }}">
+  				<div class="col-md-12">
+  				<div class="row">
+						<form role="form" method="POST" name="stores" action="{{ url_for('.analysis') }}">
+				    		<div class="row">
 					            	{{ form.csrf_token }}
-								<div class="col-md-2">
+								<div class="col-md-5">
 						            <div class="form-group">
 						    			{{ formanal.cluster(class="form-control",placeholder="category") }}
 						    		</div>
@@ -56,94 +55,88 @@
 						    	<div class="col-md-4">
 						    		Reco price action: {{ '(15%)' }}
 						    	</div>
-						    	<div class="col-md-2">
+						    	<div class="col-md-3">
 						    		<div class="form-group">
 						    			{{ formanal.test_price(class="form-control",placeholder="price") }}
 						    		</div>
 						    	</div>
-						    	<div class="col-md-2">
-						    		<div class="form-group">
-						    			<button type="submit" class="btn btn-default">Submit</button>
-						    		</div>
-						    	</div>
-					          </form>
-						</div>
-						<div class="row border-bottom">
-							<div class="col-md-6">
-								Price action by store cluster 
+						    </div>
+						   	<div class="row">
+						    	<div class="col-md-5">
+									Price action by store cluster 
+								</div>
+								<div class="col-md-4">
+									Markdown $ spent: {{ '$232K' }}
+								</div>
+						    	
+					    	</div>
+				          
+							<div class="row">
+									<div class="col-md-6"><h5>Pricing Inputs</h5></div>
 							</div>
-							<div class="col-md-6">
-								Markdown $ spent: {{ '$232K' }}
-							</div>
-						</div>		
-						<div class="row">
-								<div class="col-md-6"><h5>Pricing Inputs</h5></div>
-						</div>
-						<div class="row border-bottom">
-							<div class="col-md-3">
+							<div class="row border-bottom">
+								<div class="col-md-6">
+									Markdown Tier:  {{ '3' }}
+									<div class="row table-responsive">
+										<table class="table">
+											<th>
+												<td>Week</td>
+												<td>Offer</td>
+												<td>Sales</td>
+												<td>Unit Lift</td>
+											</th>
+											{#{% for cluster in clusters %}#}
+											<tr>
+												<td>{{ '' }}</td>
+												<td>{{ '2' }}</td>
+												<td>{{ '15%' }}{{ 'off' }}</td>
+												<td>{{ '$10M' }}</td>
+												<td>{{ '35' }}</td>
+											</tr>
+											<tr>
+												<td>{{ '' }}</td>
+												<td>{{ '6' }}</td>
+												<td>{{ '35%' }}{{ 'off' }}</td>
+												<td>{{ '$10M' }}</td>
+												<td>{{ '60' }}</td>
+											</tr>
+											{#{% endfor %}#}
+										</table>
+									</div>
+								</div>
+								<div class="col-md-3">
 									<p>Avg temp:<span class="badge left-buffer">{{ '74' }}</span></p>
 									<p>On promo:<span class="badge left-buffer">{{ 'yup' }}</span></p>
 									<p>Nat'l ad:     <span class="badge left-buffer">{{ 'nope' }}</span></p>
-							</div>
-							<div class="col-md-3">
-								<p>Aggressiveness: </p>
-								<p class=".slider"></p>
-								<p>Seasonality: </p>
-								<p class=".slider"></p>
-							</div>
-							<div class="col-md-6">
-								Markdown Tier:  {{ '3' }}
-								<div class="row table-responsive">
-									<table class="table">
-										<th>
-											<td>Week</td>
-											<td>Offer</td>
-											<td>Sales</td>
-											<td>Unit Lift</td>
-										</th>
-										{#{% for cluster in clusters %}#}
-										<tr>
-											<td>{{ '' }}</td>
-											<td>{{ '2' }}</td>
-											<td>{{ '15%' }}{{ 'off' }}</td>
-											<td>{{ '$10M' }}</td>
-											<td>{{ '35' }}</td>
-										</tr>
-										<tr>
-											<td>{{ '' }}</td>
-											<td>{{ '6' }}</td>
-											<td>{{ '35%' }}{{ 'off' }}</td>
-											<td>{{ '$10M' }}</td>
-											<td>{{ '60' }}</td>
-										</tr>
-										{#{% endfor %}#}
-									</table>
+									<div class="form-group">
+						    			<button type="submit" class="btn btn-default">Submit</button>
+						    		</div>
 								</div>
+								<div class="col-md-3">
+									<p>Aggressiveness: </p>
+									<p class=".slider"></p>
+									<p>Seasonality: </p>
+									<p class=".slider"></p>
+								</div>
+								
+								
 							</div>
-						</div>
-						<div class="row top-buffer">
-							<div class="col-md-3">Sales:  {{ '$5M' }}</div>
-							<div class="col-md-3">GM:  {{ '$2M' }}</div>
-							<div class="col-md-3">Sell-Through:  {{ '72%' }}</div>
-							<div class="col-md-3">
-								<div class="form-group no-bottom">
-							    	<button type="submit" class="btn btn-default">Add to list</button>
-							    </div>
-							</div>
-						</div>			
+						</form>
+					</div>
 				</div>
+				<div class="row top-buffer">
+					<div class="col-md-3">Sales:  {{ '$5M' }}</div>
+					<div class="col-md-3">GM:  {{ '$2M' }}</div>
+					<div class="col-md-3">Sell-Through:  {{ '72%' }}</div>
+					<div class="col-md-3">
+						<div class="form-group no-bottom">
+					    	<button type="submit" class="btn btn-default">Add to list</button>
+					    </div>
+					</div>
+				</div>			
 			</div>
 			</div>
-			
-			<div class="row">
-				<div class="row"></div>
-				<div class="row"></div>
-				<div class="row"></div>
-				<div class="row"></div>
-			</div>
-			<div class="row">
-				
-			</div>
+		</div>
 		</div>
 	</div>	
 	

@@ -4,7 +4,6 @@ from ..models import SKU, Category, Store, Cluster, Channel
 from app import db
 from .forms import cluster_anal, sku_store_search, cat_select
 from pprint import pprint as pp
-from .helper import make_stackedbar, make_wklybar
 from random import randint
 
 
