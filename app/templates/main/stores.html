@@ -25,36 +25,29 @@
 	</div>
 	{% endblock %}
 	<div class="col-md-3">Trending</div>
+		{#<div class="row">
+			{% for store in trendingstores %}
+				{{ store.store_num }}
+			{% endfor %}
+		</div>
+		<div class="row">
+			{% for store in trendingstores %}
+				{{ store.store_num }}
+			{% endfor %}
+		</div>#}
 	{% block table %}
 	<div class="col-md-9">
 		<div class="row table-responsive">
 			<table class="table table-striped">
-				<th>
-					<td>SKU</td>
-					<td>Product</td>
-					<td>Brand</td>
-					<td>Opt Price</td>
-					<td>Crnt Price</td>
-					<td>Dffrnc($)</td>
-					<td>Opt GM</td>
-					<td>Crnnt GM</td>
-					<td>Impact($K)</td>
-					<td>Units</td>
-					<td>Phase Out</td>
-					<td>Days Past</td>
-				</th>
+				{% include 'snippets/maintblhead.html' %}
 				{% for store in stores %}
 				<tr>
 						<td>{{ 'Store#:{}'.format(store.store_num) }}</td>
 						
 				</tr>
+					{# {% for cluster in store.clusters %} #}
 					<tr>
-						<td>{{ 'sku info' }}</td>
-						<td>{{ 'sku info' }}</td>
-						<td>{{ 'sku info' }}</td>
-						<td>{{ 'sku info' }}</td>
-						<td>{{ 'sku info' }}</td>
-						<td>{{ 'sku info' }}</td>
+						<td></td>
 						<td>{{ 'sku info' }}</td>
 						<td>{{ 'sku info' }}</td>
 						<td>{{ 'sku info' }}</td>
@@ -64,12 +57,7 @@
 						<td>{{ 'sku info' }}</td>
 					</tr>
 					<tr>
-						<td>{{ 'sku info' }}</td>
-						<td>{{ 'sku info' }}</td>
-						<td>{{ 'sku info' }}</td>
-						<td>{{ 'sku info' }}</td>
-						<td>{{ 'sku info' }}</td>
-						<td>{{ 'sku info' }}</td>
+						<td></td>
 						<td>{{ 'sku info' }}</td>
 						<td>{{ 'sku info' }}</td>
 						<td>{{ 'sku info' }}</td>
@@ -78,6 +66,17 @@
 						<td>{{ 'sku info' }}</td>
 						<td>{{ 'sku info' }}</td>
 					</tr>
+					<tr>
+						<td></td>
+						<td>{{ 'sku info' }}</td>
+						<td>{{ 'sku info' }}</td>
+						<td>{{ 'sku info' }}</td>
+						<td>{{ 'sku info' }}</td>
+						<td>{{ 'sku info' }}</td>
+						<td>{{ 'sku info' }}</td>
+						<td>{{ 'sku info' }}</td>
+					</tr>
+					{# {% endfor %} #}
 				{% endfor %}
 			</table>
 		</div>

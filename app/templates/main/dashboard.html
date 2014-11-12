@@ -13,41 +13,24 @@
 		<div class="col-md-12">
 			<div class="row">Performance Overview</div>
 			<div class="row">
-				<div class="col-md-6">{{graphs.sales|safe}}</div>
-				<div class="col-md-6">{{graphs.gm|safe}}</div>
+				<div class="col-md-6 no-padding">{{graphs.sales|safe}}</div>
+				<div class="col-md-6 no-padding">{{graphs.gm|safe}}</div>
 			</div>
 		</div>
 		<div class="col-md-12 top-buffer">
 			<div class="row">Performance by Week</div>
 			<div class="row">
-				<div class="col-md-6">{{graphs.saleswk|safe}}</div>
-				<div class="col-md-6">{{graphs.gmwk|safe}}</div>
+				<div class="col-md-6 no-padding">{{graphs.saleswk|safe}}</div>
+				<div class="col-md-6 no-padding">{{graphs.gmwk|safe}}</div>
 			</div>
 		</div>			
 	</div>
 	<div class="row">
 		<div class="row table-responsive top-buffer">
 			<table class="table table-striped">
-				<th>
-					<td>Category</td>
-					<td>Forecast</td>
-					<td>Vs Plan</td>
-					<td>Price Action</td>
-					<td>Sales Impact</td>
-					<td>GM Impact</td>
-					<td>Sell-Through</td>
-				</th>
+				{% include "snippets/maintblhead.html" %}
 				{% for cluster in clusters %}
-				<tr>
-					<td>{{ loop.index }}</td>
-					<td>{{ cluster.name }}</td>
-					<td>{{ '${0:0.2f}'.format(cluster.metric()/100) }}</td>
-					<td>{{ '{0:0.1f}%'.format(cluster.chg_plan()*100) }}</td>
-					<td>{{ '({0:0.1f}%)'.format(randint(0,40)) }}</td>
-					<td>{{ '${0:0.2f}'.format(cluster.impact()/100) }}</td>
-					<td>{{ '${0:0.2f}'.format(cluster.impact('gm')/100) }}</td>
-					<td>{{ '{0:0.1f}%'.format(cluster.impact('sellthru')) }}</td>
-				</tr>
+				{% include "snippets/maintblbody.html" %}
 				{% endfor %}
 			</table>
 		</div>
