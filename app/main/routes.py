@@ -2,16 +2,16 @@ from flask import render_template, request, redirect, flash, url_for, make_respo
 from . import main
 from ..models import SKU, Category, Store, Cluster, Channel
 from app import db
-from .forms import cluster_anal, sku_store_search, cat_select
+from .forms import cluster_anal, sku_store_search, cat_clu_select
 from pprint import pprint as pp
 from random import randint
-from .helper import get_clusters
+from .helper import get_clusters, get_clusters_select
 
 
 @main.route('/', methods=["POST","GET"])
 def dashboard():
 
-    form = cat_select()
+    form = cat_clu_select()
     
     if form.validate_on_submit():
         cat_id = form.categories.data
@@ -29,28 +29,31 @@ def dashboard():
 @main.route('/analysis', methods=["POST","GET"])
 def analysis():
     
-    form = cat_select()
+    form = cat_clu_select()
 
     if form.validate_on_submit():
         cat_id = form.categories.data
-        category = Category.query.get(cat_id) # Need to populate data for cats for this to work
-        clusters = get_clusters(cat_id)
-    
-    else:
-        category = Category.query.first()
-        clusters = get_clusters(category.id)
-
-    skus = db.session.query(SKU).all()
-    
-    formanal = cluster_anal()
-    if form.validate_on_submit():
-        cat_id = form.categories.data
+        clust_id = form.clusters.data
         if cat_id:
             category = Category.query.get(cat_id)
+            if clust_id:
+                cluster = Cluster.query.get(clust_id)
+            else:
+                form.clusters.choices = get_clusters_select(cat_id)
+        else:
+            category = Category.query.first()
+            if clust_id:
+                cluster = Cluster.query.get(clust_id)
+                category = Category.query.get(cluster.category_id)
+    else:
+        category = Category.query.first()
+        form.clusters.choices = get_clusters_select(category.id)
+    
+    formanal = cluster_anal()
 
     graphs = category.graphs()
 
-    return render_template("main/analysis.html",skus=skus, form=form, formanal=formanal,results=len(skus),graphs=graphs)
+    return render_template("main/analysis.html", form=form, formanal=formanal,graphs=graphs)
 
 
 @main.route('/promohistory', methods=["POST", "GET"])

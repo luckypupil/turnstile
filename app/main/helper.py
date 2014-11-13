@@ -19,7 +19,8 @@ def get_categories():
 
 def get_clusters_select(cat_id=0):
     ### Gets list of cluster for form SelectField####
-    if not cat_id: cluster_list = [(0,' All')]
+    # cluster_list = [(0,' All')]
+    cluster_list = []
     
     try:
         category = Category.query.get(cat_id)
